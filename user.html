@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manajemen User</title>
+
+<link rel="stylesheet" href="css/sidebar.css">
+
+<style>
+body{
+  font-family:Arial;
+  margin:0;
+  background:#f4f6f9;
+}
+
+/* ===== CONTENT ===== */
+.main{
+  padding:20px;
+  max-width:700px;
+  margin:0 auto;
+  padding-top:70px;
+}
+
+header{
+  background:#1e90ff;
+  color:#fff;
+  padding:15px;
+  text-align:center;
+  border-radius:12px;
+  margin-bottom:15px;
+}
+
+input, select{
+  width:100%;
+  margin-bottom:10px;
+  height:42px;
+  padding:8px;
+  border:1px solid #ddd;
+  border-radius:10px;
+}
+
+button{
+  height:42px;
+  border:none;
+  background:#1e90ff;
+  color:#fff;
+  cursor:pointer;
+  width:100%;
+  border-radius:10px;
+}
+
+.card{
+  background:#fff;
+  padding:12px;
+  border-radius:12px;
+  margin-bottom:10px;
+  box-shadow:0 3px 10px rgba(0,0,0,0.1);
+}
+
+.row{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:6px;
+}
+
+.btn{
+  padding:6px 10px;
+  border:none;
+  cursor:pointer;
+  border-radius:8px;
+}
+
+.edit{background:orange;color:#fff;}
+.hapus{background:red;color:#fff;}
+
+.small{
+  font-size:12px;
+  color:#666;
+}
+  *{
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Arial;
+}
+
+body{
+  background:#f4f7fb;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 240px;
+  height: 100%;
+  background: #111827;
+  color: #fff;
+  padding: 16px;
+  transform: translateX(-100%);
+  transition: 0.3s ease;
+  z-index: 999;
+  overflow-y: auto;
+}
+
+.sidebar.show{
+  transform: translateX(0);
+}
+
+.sidebar h2{
+  margin-bottom: 15px;
+}
+
+.sidebar a{
+  display: block;
+  color: #fff;
+  text-decoration: none;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 6px;
+}
+
+.sidebar a:hover{
+  background: #1e90ff;
+}
+
+.sidebar a.active{
+  background: #1e90ff;
+}
+
+/* ===== BUTTON ===== */
+.toggle-btn{
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 1000;
+  background: #1e90ff;
+  color: white;
+  border: none;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 18px;
+}
+
+/* ===== CONTENT ===== */
+.main{
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.title{
+  margin-top: 50px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 20px;
+}
+
+/* ===== CARD ===== */
+.card{
+  background:#fff;
+  padding:16px;
+  border-radius:16px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.08);
+}
+
+.card label{
+  display:block;
+  margin-top:10px;
+  font-size:14px;
+}
+
+.card input{
+  width:100%;
+  padding:10px;
+  margin-top:5px;
+  border:1px solid #ddd;
+  border-radius:10px;
+}
+
+.card button{
+  margin-top:15px;
+  width:100%;
+  padding:12px;
+  border:none;
+  background:#1e90ff;
+  color:#fff;
+  border-radius:10px;
+  font-size:16px;
+}
+
+/* ===== HASIL ===== */
+.hasil{
+  margin-top:15px;
+  background:#fff;
+  padding:15px;
+  border-radius:12px;
+}
+  .toggle-btn{
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 1000;
+  background: #1e90ff;
+  color: white;
+  border: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* efek klik */
+.toggle-btn:active{
+  transform: scale(0.95);
+}
+  .btn{
+  padding:4px 8px;
+  font-size:12px;
+  border:none;
+  cursor:pointer;
+  border-radius:6px;
+  line-height:1;
+}
+
+/* tombol edit */
+.edit{
+  background:orange;
+  color:#fff;
+}
+
+/* tombol hapus */
+.hapus{
+  background:red;
+  color:#fff;
+}
+
+/* biar tombol tidak terlalu besar saat di row */
+.row .btn{
+  min-width:8px;
+}
+  .icon-btn{
+  width:32px;
+  height:32px;
+  border:none;
+  border-radius:8px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:14px;
+  cursor:pointer;
+  color:#fff;
+}
+
+/* edit */
+.icon-btn.edit{
+  background:orange;
+}
+
+/* hapus */
+.icon-btn.hapus{
+  background:red;
+}
+
+/* hover efek */
+.icon-btn:active{
+  transform:scale(0.92);
+}
+
+/* row tombol biar rapat */
+.row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- ===== TOGGLE BUTTON ===== -->
+<button class="toggle-btn" onclick="toggleSidebar()">☰</button>
+
+<!-- ===== SIDEBAR ===== -->
+<div class="sidebar" id="sidebar">
+  <h2>School Bus</h2>
+
+  <a href="dashboard.html">🏠 Dashboard</a>
+  <a href="input.html">📝 Input Perjalanan </a>
+  <a href="driver.html">🧑‍✈️ Driver</a>
+  <a href="cari.html">✏️ Edit</a>
+  <a href="lapor.html">📊 Laporan</a>
+  <a href="backup.html">💾 Backup</a>
+  <a href="config.html">⚙️ Config</a>
+  <a href="bbm.html">⛽ BBM</a>
+  <a href="user.html" class="active">👤 User</a>
+
+  <hr>
+  <a href="#" onclick="logout()">🚪 Logout</a>
+</div>
+
+<!-- ===== MAIN ===== -->
+<div class="main">
+
+  <header>
+    <h2>Manajemen User</h2>
+  </header>
+
+  <input type="text" id="username" placeholder="Username">
+  <input type="text" id="password" placeholder="Password">
+
+  <select id="role" onchange="toggleDriver()">
+    <option value="admin">Admin</option>
+    <option value="driver">Driver</option>
+  </select>
+
+  <select id="driverId" style="display:none">
+    <option value="">-- Pilih Driver --</option>
+  </select>
+
+  <button onclick="simpanUser()">Simpan User</button>
+
+  <hr>
+
+  <div id="listUser"></div>
+
+</div>
+
+<!-- ===== SCRIPT ===== -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  deleteDoc,
+  doc,
+  updateDoc,
+  getDoc,
+  onSnapshot
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSy...",
+  authDomain: "schoolbus-6a7fd.firebaseapp.com",
+  projectId: "schoolbus-6a7fd",
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// ================= AUTH =================
+const role = (localStorage.getItem("role") || "").toLowerCase();
+const login = localStorage.getItem("login");
+
+if (login !== "true") {
+  window.location.href = "index.html";
+}
+
+if (role !== "admin") {
+  alert("Akses ditolak!");
+  window.location.href = "dashboard.html";
+}
+
+// ================= STATE =================
+let editId = null;
+let driverMap = {};
+let unsubscribeUser = null;
+let unsubscribeDriver = null;
+
+// ================= SIDEBAR =================
+window.toggleSidebar = function () {
+  document.getElementById("sidebar").classList.toggle("show");
+};
+
+window.logout = function () {
+  localStorage.clear();
+  window.location.href = "index.html";
+};
+
+// ================= DRIVER REALTIME =================
+function loadDriverRealtime() {
+  const select = document.getElementById("driverId");
+
+  if (unsubscribeDriver) unsubscribeDriver();
+
+  unsubscribeDriver = onSnapshot(collection(db, "drivers"), (snapshot) => {
+    select.innerHTML = '<option value="">-- Pilih Driver --</option>';
+    driverMap = {};
+
+    snapshot.forEach((docSnap) => {
+      const d = docSnap.data();
+      const nama = d.nama || "-";
+
+      driverMap[docSnap.id] = nama;
+
+      const opt = document.createElement("option");
+      opt.value = docSnap.id;
+      opt.textContent = nama;
+      select.appendChild(opt);
+    });
+  });
+}
+
+// ================= TOGGLE DRIVER =================
+window.toggleDriver = function () {
+  const roleInput = document.getElementById("role").value;
+  document.getElementById("driverId").style.display =
+    roleInput === "driver" ? "block" : "none";
+};
+
+// ================= USER REALTIME =================
+function loadUserRealtime() {
+  const list = document.getElementById("listUser");
+
+  if (unsubscribeUser) unsubscribeUser();
+
+  unsubscribeUser = onSnapshot(collection(db, "users"), (snapshot) => {
+    list.innerHTML = "";
+
+    snapshot.forEach((docSnap) => {
+    const u = docSnap.data();
+
+    if (u.role === "admin" && u.username !== "admin") {
+        return;
+    }
+
+    const card = document.createElement("div");
+      card.className = "card";
+
+      card.innerHTML = `
+        <div class="row">
+          <b>${u.username}</b>
+          <span>${u.role}</span>
+        </div>
+
+        <div class="row small">
+          Driver: ${u.driverName || driverMap[u.driverId] || "-"}
+        </div>
+
+        <div class="row">
+          <button class="icon-btn edit"
+            onclick="editUser('${docSnap.id}')">✏️</button>
+
+          <button class="icon-btn hapus"
+            onclick="hapusUser('${docSnap.id}')">🗑️</button>
+        </div>
+      `;
+
+      list.appendChild(card);
+    });
+  });
+}
+
+// ================= SIMPAN USER =================
+async function simpanUser() {
+  const username = document.getElementById("username").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const roleInput = document.getElementById("role").value;
+  const driverId = document.getElementById("driverId").value;
+
+  if (!username || !password) {
+    alert("Username & password wajib diisi");
+    return;
+  }
+
+  if (roleInput === "driver" && !driverId) {
+    alert("Driver wajib dipilih");
+    return;
+  }
+
+  const payload = {
+    username,
+    password,
+    role: roleInput,
+    driverId: roleInput === "driver" ? driverId : "",
+    driverName: roleInput === "driver" ? driverMap[driverId] : "",
+    updatedAt: new Date()
+  };
+
+  try {
+    if (editId) {
+      await updateDoc(doc(db, "users", editId), payload);
+    } else {
+      await addDoc(collection(db, "users"), payload);
+    }
+
+    // sinkron ke driver
+    if (roleInput === "driver" && driverId) {
+      await updateDoc(doc(db, "drivers", driverId), {
+        username: username
+      });
+    }
+
+    resetForm();
+  } catch (err) {
+    alert("Gagal simpan: " + err.message);
+  }
+}
+
+window.simpanUser = simpanUser;
+
+// ================= EDIT =================
+window.editUser = async function (id) {
+  const snap = await getDoc(doc(db, "users", id));
+  const u = snap.data();
+
+  document.getElementById("username").value = u.username;
+  document.getElementById("password").value = u.password;
+  document.getElementById("role").value = u.role;
+  document.getElementById("driverId").value = u.driverId || "";
+
+  toggleDriver();
+  editId = id;
+};
+
+// ================= HAPUS =================
+window.hapusUser = async function (id) {
+  if (!confirm("Hapus user ini?")) return;
+
+  try {
+    await deleteDoc(doc(db, "users", id));
+  } catch (err) {
+    alert("Gagal hapus: " + err.message);
+  }
+};
+
+// ================= RESET =================
+function resetForm() {
+  editId = null;
+  document.getElementById("username").value = "";
+  document.getElementById("password").value = "";
+  document.getElementById("role").value = "admin";
+  document.getElementById("driverId").value = "";
+  toggleDriver();
+}
+
+// ================= INIT =================
+loadDriverRealtime();
+toggleDriver();
+loadUserRealtime();
+</script>
+</script>
+
+</body>
+</html>

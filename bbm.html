@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kalkulator HPP School Bus</title>
+
+<style>
+  *{box-sizing: border-box;margin: 0;padding: 0;font-family: 'Segoe UI', Arial;}
+  body{background:#f4f7fb;}
+
+  /* ===== SIDEBAR ===== */
+  .sidebar{
+    position:fixed;top:0;left:0;width:220px;height:100%;
+    background:#1e293b;color:#fff;padding:20px 12px;
+    display:flex;flex-direction:column;z-index:1000;
+    transition:.3s;
+  }
+  .sidebar h3{text-align:center;margin-bottom:20px;}
+  .sidebar a{
+    color:#cbd5f5;text-decoration:none;padding:10px 12px;
+    border-radius:10px;margin-bottom:6px;display:block;font-size:14px;
+  }
+  .sidebar a:hover{background:#334155;color:#fff;}
+  .sidebar a.active{background:#1e90ff;color:#fff;}
+
+  body{margin-left:230px;}
+  .menu-toggle{display:none;}
+  .overlay{
+    position:fixed;top:0;left:0;width:100%;height:100%;
+    background:rgba(0,0,0,0.3);z-index:998;display:none;
+  }
+  .overlay.show{display:block;}
+
+  @media(max-width:768px){
+    .sidebar{left:-100%;}
+    .sidebar.show{left:0;}
+    body{margin-left:0;}
+    .menu-toggle{
+      display:block;position:fixed;top:10px;left:10px;
+      background:#1e90ff;color:#fff;border:none;
+      padding:8px 10px;border-radius:8px;z-index:1100;
+    }
+  }
+
+  /* ===== CONTENT ===== */
+  .main{padding: 20px;max-width: 650px;margin: 0 auto;}
+  .title{margin-top: 50px;margin-bottom: 20px;text-align: center;font-size: 20px;font-weight:700;}
+
+  .card{
+    background:#fff;padding:20px;border-radius:16px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.08);margin-bottom:20px;
+  }
+  .card h4{margin-bottom:12px;color:#1e293b;}
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+  .card label{display:block;margin-top:10px;font-size:13px;font-weight:600;color:#4b5563;}
+  .card input{
+    width:100%;padding:10px;margin-top:5px;border:1px solid #ddd;
+    border-radius:10px;font-size:14px;
+  }
+  .card button{
+    margin-top:15px;width:100%;padding:12px;border:none;
+    background:#1e90ff;color:#fff;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;
+  }
+  .card button:hover{background:#2563eb;}
+
+  /* ===== HASIL ===== */
+  .hasil{background:#fff;padding:20px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.06);}
+  .hasil h3{margin-bottom:12px;color:#1e293b;border-bottom:2px solid #e5e7eb;padding-bottom:8px;}
+  .hasil p{margin:8px 0;font-size:14px;display:flex;justify-content:space-between;}
+  .hasil hr{margin:10px 0;border:none;border-top:1px dashed #ddd;}
+  .hasil .total{font-weight:700;font-size:16px;color:#1e90ff;background:#eff6ff;padding:10px;border-radius:8px;}
+  .hasil .murid{font-weight:700;font-size:18px;color:#10b981;background:#ecfdf5;padding:10px;border-radius:8px;}
+  .note{font-size:12px;color:#ef4444;margin-top:8px;}
+</style>
+</head>
+
+<body>
+
+<button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+<div id="overlay" class="overlay" onclick="toggleSidebar()"></div>
+
+<div class="sidebar" id="sidebar">
+  <h3>School Bus</h3>
+  <a href="dashboard.html">🏠 Dashboard</a>
+  <a href="input.html">📝 Input Perjalanan</a>
+  <a href="driver.html">🧑‍✈️ Driver</a>
+  <a href="cari.html">✏️ Edit</a>
+  <a href="lapor.html">📊 Laporan</a>
+  <a href="backup.html">💾 Backup</a>
+  <a href="config.html">⚙️ Config</a>
+  <a href="bbm.html" class="active">⛽ HPP Bus</a>
+  <a href="user.html">👤 User</a>
+  <hr style="border-color:#334155;margin:10px 0;">
+  <a href="#" onclick="logout()">🚪 Logout</a>
+</div>
+
+<div class="main">
+  <h2 class="title">Kalkulator HPP School Bus</h2>
+
+  <div class="card">
+    <h4>Data Rute & BBM</h4>
+    <div class="grid-3">
+      <div>
+        <label>Jarak/Hari (km)</label>
+        <input type="number" id="jarakHari" placeholder="80">
+      </div>
+      <div>
+        <label>Hari Kerja</label>
+        <input type="number" id="hariKerja" value="20">
+      </div>
+      <div>
+        <label>Jumlah Murid</label>
+        <input type="number" id="jumlahMurid" placeholder="15">
+      </div>
+    </div>
+    <div class="grid-2">
+      <div>
+        <label>Harga BBM (Rp/L)</label>
+        <input type="number" id="hargaBBM" value="10000">
+      </div>
+      <div>
+        <label>Efisiensi Bus (km/L)</label>
+        <input type="number" id="kmPerLiter" value="5">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h4>Biaya Operasional</h4>
+    <div class="grid-2">
+      <div>
+        <label>Service/10.000km (Rp)</label>
+        <input type="number" id="service" value="1500000">
+      </div>
+      <div>
+        <label>Cadangan Ban/Bulan (Rp)</label>
+        <input type="number" id="ban" value="250000">
+      </div>
+    </div>
+    <label>Cadangan Kerusakan (%)</label>
+    <input type="number" id="cadangan" value="8">
+    <button onclick="hitung()">Hitung HPP</button>
+  </div>
+
+  <div class="hasil" id="hasil" style="display:none;"></div>
+
+</div>
+
+<script>
+function hitung(){
+  const jarakHari = parseFloat(document.getElementById("jarakHari").value) || 0;
+  const hariKerja = parseFloat(document.getElementById("hariKerja").value) || 20;
+  const jumlahMurid = parseFloat(document.getElementById("jumlahMurid").value) || 0;
+  const hargaBBM = parseFloat(document.getElementById("hargaBBM").value) || 10000;
+  const kmPerLiter = parseFloat(document.getElementById("kmPerLiter").value) || 5;
+  const service10rb = parseFloat(document.getElementById("service").value) || 1500000;
+  const biayaBanBulan = parseFloat(document.getElementById("ban").value) || 250000;
+  const cadanganPersen = (parseFloat(document.getElementById("cadangan").value) || 8) / 100;
+
+  if(jarakHari <= 0){
+    alert("Isi Jarak per Hari dulu ya");
+    return;
+  }
+
+  const rupiah = n => new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",minimumFractionDigits:0}).format(n);
+
+  // 1. PER BULAN
+  const totalKmBulan = jarakHari * hariKerja;
+  const literBulan = totalKmBulan / kmPerLiter;
+  const biayaBBMBulan = literBulan * hargaBBM;
+  const biayaServiceBulan = (totalKmBulan / 10000) * service10rb;
+  
+  const biayaOperasional = biayaBBMBulan + biayaServiceBulan + biayaBanBulan;
+  const cadangan = biayaOperasional * cadanganPersen;
+  const totalBulan = biayaOperasional + cadangan;
+  const totalHari = totalBulan / hariKerja;
+
+  // 2. PER MURID
+  const hppPerMurid = jumlahMurid > 0 ? totalBulan / jumlahMurid : 0;
+
+  let html = `
+    <h3>Rincian HPP School Bus</h3>
+    <p><span>Total KM/Bulan</span> <b>${totalKmBulan.toLocaleString('id-ID')} km</b></p>
+    <p><span>Asumsi BBM</span> <b>1:${kmPerLiter} km/L</b></p>
+    <hr>
+    <p><span>BBM/Bulan</span> <span>${literBulan.toFixed(0)} L = ${rupiah(biayaBBMBulan)}</span></p>
+    <p><span>Service/Bulan</span> <span>${rupiah(biayaServiceBulan)}</span></p>
+    <p><span>Cadangan Ban/Bulan</span> <span>${rupiah(biayaBanBulan)}</span></p>
+    <p><span>Cadangan Rusak ${cadanganPersen*100}%</span> <span>${rupiah(cadangan)}</span></p>
+    <hr>
+    <p class="total"><span>TOTAL HPP/BULAN</span> <span>${rupiah(totalBulan)}</span></p>
+    <p><span>Rata-rata/Hari Kerja</span> <b>${rupiah(totalHari)}</b></p>
+  `;
+
+  if(jumlahMurid > 0){
+    html += `
+    <hr>
+    <p class="murid"><span>IURAN PER MURID/BULAN</span> <span>${rupiah(hppPerMurid)}</span></p>
+    <p style="font-size:12px;color:#666"><span>Dari ${jumlahMurid} murid</span></p>
+    `;
+  }
+
+  html += `<p class="note">*Belum termasuk Gaji Driver + Cicilan Bus + Parkir/Tol</p>`;
+  
+  document.getElementById("hasil").style.display = 'block';
+  document.getElementById("hasil").innerHTML = html;
+}
+
+function toggleSidebar(){
+  document.getElementById("sidebar").classList.toggle("show");
+  document.getElementById("overlay").classList.toggle("show");
+}
+
+function logout(){
+  localStorage.clear();
+  window.location.href = "index.html";
+}
+
+document.querySelectorAll(".sidebar a").forEach(a=>{
+  a.addEventListener("click", ()=>{
+    if(window.innerWidth <= 768){ toggleSidebar(); }
+  });
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - School Bus App</title>
+ 
+  <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1e90ff">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="School Bus App">
+  
+  <style>
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+    }
+
+    :root{
+      --primary:#1e90ff;
+      --primary-dark:#187bdb;
+      --success:#16a34a;
+      --warning:#f59e0b;
+      --danger:#ef4444;
+      --purple:#7c3aed;
+      --cyan:#06b6d4;
+      --bg:#f4f7fb;
+      --card:#ffffff;
+      --text:#1f2937;
+      --muted:#6b7280;
+      --border:#dbe3ee;
+      --shadow:0 10px 28px rgba(15,23,42,.08);
+      --radius:22px;
+    }
+
+    body{
+      font-family:Arial,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      padding:16px;
+      padding-bottom:110px;
+      max-width:760px;
+      margin:0 auto;
+    }
+
+    .hero{
+      background:linear-gradient(135deg,#1e90ff,#60a5fa);
+      color:#fff;
+      border-radius:26px;
+      padding:22px 18px;
+      box-shadow:0 14px 34px rgba(30,144,255,.24);
+      margin-bottom:18px;
+    }
+
+    .hero-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+      margin-bottom:14px;
+    }
+
+    .hero h1{
+      font-size:25px;
+      margin-bottom:6px;
+    }
+
+  
+       .hero p{
+     
+      font-size:13px;
+      line-height:1.6;
+      opacity:.96;
+    }
+
+    .hero-badge{
+  width:72px;
+  height:72px;
+  border-radius:18px;
+  background:#ffffff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 8px 20px rgba(0,0,0,0.08);
+  overflow:hidden;
+  flex-shrink:0;
+}
+
+.hero-badge img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:18px;
+}
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:12px;
+      margin-bottom:18px;
+    }
+
+    .stat-card{
+      background:var(--card);
+      border-radius:20px;
+      padding:16px;
+      box-shadow:var(--shadow);
+      border:1px solid #edf2f7;
+    }
+
+    .stat-label{
+      font-size:12px;
+      color:var(--muted);
+      margin-bottom:8px;
+    }
+
+    .stat-value{
+      font-size:24px;
+      font-weight:800;
+      color:#111827;
+      margin-bottom:4px;
+    }
+
+    .stat-sub{
+      font-size:12px;
+      color:#94a3b8;
+    }
+
+    .section-title{
+      margin:18px 0 12px;
+      font-size:17px;
+      font-weight:700;
+      color:#334155;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:14px;
+    }
+
+    .menu-card{
+      background:var(--card);
+      border-radius:22px;
+      padding:18px;
+      box-shadow:var(--shadow);
+      border:1px solid #edf2f7;
+      text-decoration:none;
+      color:inherit;
+      transition:.2s;
+      display:block;
+      min-height:168px;
+    }
+
+    .menu-card:hover{
+      transform:translateY(-2px);
+    }
+
+    .menu-icon{
+      width:56px;
+      height:56px;
+      border-radius:18px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:25px;
+      margin-bottom:14px;
+      color:#fff;
+    }
+
+    .bg-primary{ background:var(--primary); }
+    .bg-success{ background:var(--success); }
+    .bg-warning{ background:var(--warning); }
+    .bg-danger{ background:var(--danger); }
+    .bg-purple{ background:var(--purple); }
+    .bg-cyan{ background:var(--cyan); }
+
+    .menu-title{
+      font-size:17px;
+      font-weight:700;
+      margin-bottom:7px;
+      color:#111827;
+      line-height:1.4;
+    }
+
+    .menu-desc{
+      font-size:13px;
+      color:var(--muted);
+      line-height:1.6;
+    }
+
+    .mini-box{
+      margin-top:16px;
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:20px;
+      padding:16px;
+      box-shadow:var(--shadow);
+    }
+
+    .mini-box h3{
+      font-size:16px;
+      margin-bottom:8px;
+      color:#0f172a;
+    }
+
+    .mini-box p{
+      font-size:13px;
+      color:var(--muted);
+      line-height:1.7;
+    }
+
+    .bottom-nav{
+      position:fixed;
+      left:50%;
+      transform:translateX(-50%);
+      bottom:10px;
+      width:min(760px, calc(100% - 20px));
+      background:#fff;
+      border:1px solid #e5e7eb;
+      box-shadow:0 10px 28px rgba(15,23,42,.12);
+      border-radius:20px;
+      padding:8px;
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:8px;
+      z-index:999;
+    }
+
+    .nav-item{
+      text-decoration:none;
+      color:#64748b;
+      font-weight:700;
+      font-size:13px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:4px;
+      padding:10px 6px;
+      border-radius:14px;
+      transition:.2s;
+    }
+
+    .nav-item:hover{
+      background:#f1f5f9;
+    }
+
+    .nav-item.active{
+      background:#e0f2fe;
+      color:#0284c7;
+    }
+
+    .nav-item span{
+      font-size:11px;
+    }
+
+    @media (max-width:560px){
+      .grid{
+        grid-template-columns:1fr 1fr;
+      }
+
+      .menu-card{
+        min-height:160px;
+        padding:16px;
+      }
+
+      .menu-title{
+        font-size:15px;
+      }
+
+      .menu-desc{
+        font-size:12px;
+      }
+
+      .stat-value{
+        font-size:22px;
+      }
+    }
+
+    @media (max-width:420px){
+      .grid,
+      .stats{
+        grid-template-columns:1fr;
+      }
+
+      .menu-card{
+        min-height:auto;
+      }
+
+      .hero-top{
+        flex-direction:auto;
+      }
+    }
+    /* SIDEBAR */
+.sidebar{
+  position:fixed;
+  top:0;
+  left:0;
+  width:220px;
+  height:100%;
+  background:#1e293b;
+  color:#fff;
+  padding:20px 12px;
+  display:flex;
+  flex-direction:column;
+  z-index:1000;
+}
+
+.sidebar h3{
+  text-align:center;
+  margin-bottom:20px;
+}
+
+.sidebar a{
+  color:#cbd5f5;
+  text-decoration:none;
+  padding:10px 12px;
+  border-radius:10px;
+  margin-bottom:6px;
+  display:block;
+  font-size:14px;
+}
+
+.sidebar a:hover{
+  background:#334155;
+  color:#fff;
+}
+
+.sidebar a.active{
+  background:#1e90ff;
+  color:#fff;
+}
+
+/* CONTENT GESER */
+body{
+  margin-left:230px;
+}
+
+/* TOGGLE BUTTON */
+.menu-toggle{
+  display:none;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+  .sidebar{
+    left:-100%;
+    transition:.3s;
+  }
+
+  .sidebar.show{
+    left:0;
+  }
+  
+  
+.sidebar h3{
+  text-align:center;
+  margin-bottom:20px;
+}
+
+  body{
+    margin-left:0;
+  }
+
+  .menu-toggle{
+    display:block;
+    position:fixed;
+    top:10px;
+    left:10px;
+    background:#1e90ff;
+    color:#fff;
+    border:none;
+    padding:8px 10px;
+    border-radius:8px;
+    z-index:1100;
+  }
+}
+ 
+.label-bold {
+    font-weight: bold;
+}
+.filter-container div{
+  display:flex;
+  flex-direction:column;
+  font-size:13px;
+}
+
+.label-bold{
+  font-weight:bold;
+  margin-bottom:4px;
+}
+select{
+  color:#111;            /* biar hitam tegas */
+  font-weight:600;       /* agak bold */
+}
+/* WRAPPER BIAR BISA SCROLL */
+.table-wrapper{
+  overflow-x:auto;
+}
+
+/* TABLE MIN WIDTH BIAR GA KEJEPIT */
+table{
+  min-width:600px;
+}
+
+/* MOBILE OPTIMIZE */
+@media(max-width:768px){
+
+  th, td{
+    font-size:11px;
+    padding:6px;
+    white-space:nowrap; /* biar ga turun ke bawah */
+  }
+
+  h2{
+    font-size:16px;
+  }
+
+  .card{
+    padding:10px;
+  }
+
+}
+  .table-wrapper::-webkit-scrollbar{
+  height:6px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb{
+  background:#1e90ff;
+  border-radius:14px;
+}
+  .header-driver{
+  background:#cbd5f5;
+  color:#11;
+  font-weight:600;
+  font-size:16px;
+}
+  #overlay{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.4);
+  z-index:900;
+  display:none;
+}
+
+/* kalau aktif */
+#overlay.show{
+  display:block;
+}
+
+  .hero p {
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.salam {
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+  display: inline-block;
+  animation: wave 2s ease-in-out;
+}
+
+.username {
+  font-size: 19px;
+  font-weight: 700;
+  color: yellow; /* kuning soft biar pop-up */
+  text-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.role {
+  font-size: 13px;
+  color:yellow;
+  background: rgba(255,255,255,0.2);
+  padding: 3px 10px;
+  border-radius: 20px;
+  display: inline-block;
+  margin: 4px 0;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.3);
+}
+
+.role b {
+  color: red;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.subtext {
+  color: black;
+  font-size: 13px;
+  opacity: 0.95;
+  display: inline-block;
+  margin-top: 2px;
+}
+
+@keyframes wave {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+  .footer {
+  text-align: center;
+  padding: 20px;
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 40px;
+}
+
+  </style>
+ </head>
+<body>
+  <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+
+   
+<div class="sidebar" id="sidebar">
+  <h3>School Bus</h3>
+
+  <a href="dashboard.html" class="active">🏠 Dashboard</a>
+  <a href="input.html">📝 Input Perjalanan </a>
+  <a href="driver.html">🧑‍✈️ Driver</a>
+  <a href="cari.html">✏️ Edit</a>
+  <a href="lapor.html">📊 Laporan</a>
+  <a href="backup.html">💾 Backup</a>
+  <a href="config.html">⚙️ Config</a>
+ <!-- 🔥 MENU BARU -->
+  <a href="bbm.html">⛽ BBM</a>
+  <a href="user.html">👤 User</a>
+
+  <hr>
+  <a href="#" onclick="logout()">🚪 Logout</a>
+</div>
+  <div id="overlay" onclick="closeSidebar()"></div>
+  
+<div class="main">
+  <!-- SEMUA KONTEN LAMA DI SINI -->
+<div class="mini-box">
+  <h3>Login Info</h3>
+  <p id="infoUser"></p>
+</div>
+  <div class="hero">
+  <div class="hero-top">
+    <div>
+      <h1>Dashboard School Bus</h1>
+      <p>
+        Kelola perjalanan siswa, 
+        driver, laporan, backup data, 
+        dan konfigurasi harga
+        dalam satu halaman 
+        yang lebih rapi dan nyaman dipakai di HP.
+      </p>
+    </div>
+    <div class="hero-badge">
+      <img src="./img/icon-512.png" alt="Icon School Bus">
+    </div>
+  </div>
+</div>
+
+  
+    <div class="stat-card">
+      <div class="stat-label">Status Aplikasi</div>
+      <div class="stat-value">ON</div>
+      <div class="stat-sub">Siap digunakan</div>
+    </div>
+  </div>
+
+  <div class="footer">
+  © 2026 Arfa • Sistem Informasi Perjalanan Drver
+</div>
+  
+  <script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { 
+  getFirestore, 
+  collection, 
+  getDocs, 
+  query, 
+  orderBy 
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBxbArCZ6iIWQ8wS7QIonZOeN4t_r9o2WU",
+  authDomain: "schoolbus-6a7fd.firebaseapp.com",
+  projectId: "schoolbus-6a7fd",
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// ================= LOGIN CHECK =================
+const isLogin = localStorage.getItem("login");
+const username = localStorage.getItem("username");
+const role = (localStorage.getItem("role") || "").toLowerCase();
+if(role !== "admin"){
+  window.location.href = "index.html";
+}
+  const driverId = localStorage.getItem("driverId");
+
+if(isLogin !== "true" || !username || !role){
+  window.location.href = "login.html";
+}
+
+// ================= UI INFO =================
+const jam = new Date().getHours();
+let salam = "Selamat datang";
+
+if(jam < 12) salam = "Selamat pagi";
+else if(jam < 18) salam = "Selamat siang";
+else salam = "Selamat malam";
+
+// 🔥 tampilkan salam + role
+document.querySelector(".hero p").innerHTML =
+  `<span class="salam">${salam},</span> <span class="username">${username}</span> 👋<br>
+   <span class="role"><b>${role.toUpperCase()}</b></span><br>
+   <span class="subtext">Kelola perjalanan dengan mudah.</span>`;
+// 🔥 info user box
+document.getElementById("infoUser").innerHTML =
+  `User: <b>${username}</b><br>
+   Role: <b>${role}</b><br>
+   ${role === "admin" ? "Akses penuh sistem" : "Akses terbatas sesuai driver"}`;
+
+// ================= FORMAT =================
+function formatTanggal(ts){
+  if(!ts) return "-";
+  const t = ts.toDate ? ts.toDate() : new Date(ts);
+  return t.toLocaleDateString("id-ID", {
+    day:"2-digit",
+    month:"short",
+    year:"numeric"
+  });
+}
+
+function rupiah(n){
+  return "Rp " + Number(n || 0).toLocaleString("id-ID");
+}
+
+// ================= ROLE BASE MENU =================
+
+function applyRoleUI(){
+  console.log("ROLE CHECK:", role);
+
+  const hideListDriver = [
+    "driver.html",
+    "backup.html",
+    "config.html",
+    "bbm.html",
+    "user.html"
+  ];
+
+  if(role === "driver"){
+    hideListDriver.forEach(hideMenu);
+  }
+
+  // admin tidak hide apa pun
+}
+  
+function hideMenu(href){
+  const links = document.querySelectorAll(`a[href="${href}"]`);
+  links.forEach(el => el.style.display = "none");
+}
+
+// ================= LOAD DATA =================
+async function loadData(){
+  try{
+    const dataEl = document.getElementById("data");
+    const totalEl = document.getElementById("totalData");
+
+    dataEl.innerHTML = "⏳ Loading...";
+
+    const q = query(
+      collection(db,"perjalanan"),
+      orderBy("createdAt","desc")
+    );
+
+    const snapshot = await getDocs(q);
+
+    let rows = "";
+    let total = 0;
+    let totalUang = 0;
+
+    snapshot.forEach(doc=>{
+      const d = doc.data();
+      if(!d) return;
+
+      // 🔥 ROLE FILTER
+      if(role !== "admin"){
+        if(d.owner && d.owner !== username) return;
+        if(driverId && d.driverId && d.driverId !== driverId) return;
+      }
+
+      total++;
+      totalUang += Number(d.total || 0);
+
+      // 🔥 GANTI JADI BARIS TABEL
+      rows += `
+        <tr>
+          <td>${formatTanggal(d.createdAt)}</td>
+          <td>${d.namaSiswa || "-"}</td>
+          <td>${d.namaDriver || "-"}</td>
+          <td>${d.owner || "-"}</td>
+          <td><b>${rupiah(d.total)}</b></td>
+        </tr>
+      `;
+    });
+
+    totalEl.innerText = total;
+
+    // 🔥 TABEL RESPONSIVE + SCROLL
+    dataEl.innerHTML = `
+      <div class="mini-box" style="margin-bottom:10px;">
+        <b>Total Data:</b> ${total}<br>
+        <b>Total Uang:</b> ${rupiah(totalUang)}
+      </div>
+      <div class="table-wrapper">
+        <table>
+          <thead class="header-driver">
+            <tr>
+              <th>Tanggal</th>
+              <th>Nama Siswa</th>
+              <th>Driver</th>
+              <th>Input By</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows || `<tr><td colspan="5" style="text-align:center;color:gray">Belum ada data perjalanan</td></tr>`}
+          </tbody>
+        </table>
+      </div>
+    `;
+
+  }catch(err){
+    document.getElementById("data").innerHTML =
+      "<p style='color:red'>❌ Gagal load data</p>";
+    console.error(err);
+  }
+}
+  
+    
+
+  //toggle//
+  window.toggleMenu = function () {
+  const sidebar = document.querySelector(".sidebar");
+  const overlay = document.getElementById("overlay");
+
+  sidebar.classList.toggle("show");
+  overlay.classList.toggle("show");
+};
+  
+  window.closeSidebar = function () {
+  document.querySelector(".sidebar").classList.remove("show");
+  document.getElementById("overlay").classList.remove("show");
+};
+// ================= LOGOUT =================
+window.logout = function(){
+  localStorage.clear();
+  window.location.href = "login.html";
+}
+// ================= INIT =================
+applyRoleUI();
+loadData();
+
+// ================= ACTIVE MENU =================
+const links = document.querySelectorAll(".sidebar a");
+const current = window.location.pathname.split("/").pop();
+
+links.forEach(link=>{
+  if(link.getAttribute("href") === current){
+    link.classList.add("active");
+  }
+});
+  
+</script>
+

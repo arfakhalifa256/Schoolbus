@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login System</title>
+
+<style>
+body{
+  font-family:Arial;
+  background:#f4f6f9;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
+
+.box{
+  background:#fff;
+  padding:20px;
+  border-radius:10px;
+  width:320px;
+  box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+input{
+  width:100%;
+  height:40px;
+  margin-bottom:10px;
+  padding:8px;
+  box-sizing:border-box;
+}
+
+button{
+  width:100%;
+  height:40px;
+  background:#1e90ff;
+  color:#fff;
+  border:none;
+  cursor:pointer;
+  margin-bottom:5px;
+}
+
+button:disabled{
+  background:gray;
+}
+
+.small{
+  font-size:12px;
+  text-align:center;
+  color:#1e90ff;
+  cursor:pointer;
+}
+
+#loading{
+  display:none;
+  text-align:center;
+  font-size:13px;
+  margin-top:10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+
+  <h3 id="title">Login</h3>
+
+  <input type="text" id="username" placeholder="Username">
+  <input type="password" id="password" placeholder="Password">
+
+  <button id="btnLogin" onclick="login()">Login</button>
+  <button id="btnRegister" onclick="register()" style="display:none;">Daftar</button>
+
+  <div id="loading">Loading...</div>
+
+  <div class="small" onclick="toggleMode()" id="toggleText">
+    Belum punya akun? Daftar
+  </div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  doc,
+  setDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+// ================= FIREBASE =================
+const firebaseConfig = {
+  apiKey: "AIzaSyBxbArCZ6iIWQ8wS7QIonZOeN4t_r9o2WU",
+  authDomain: "schoolbus-6a7fd.firebaseapp.com",
+  databaseURL: "https://schoolbus-6a7fd-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "schoolbus-6a7fd",
+  storageBucket: "schoolbus-6a7fd.firebasestorage.app",
+  messagingSenderId: "486602913199",
+  appId: "1:486602913199:web:9547f39f5f57f9c87b2b5a"
+};
+  
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// ================= MODE =================
+let mode = "login";
+
+window.toggleMode = function(){
+
+  mode = mode === "login" ? "register" : "login";
+
+  document.getElementById("title").innerText =
+    mode === "login" ? "Login" : "Daftar";
+
+  document.getElementById("btnLogin").style.display =
+    mode === "login" ? "block" : "none";
+
+  document.getElementById("btnRegister").style.display =
+    mode === "register" ? "block" : "none";
+
+  document.getElementById("toggleText").innerText =
+    mode === "login"
+      ? "Belum punya akun? Daftar"
+      : "Sudah punya akun? Login";
+};
+
+// ================= REGISTER =================
+window.register = async function(){
+
+  const usernameEl = document.getElementById("username");
+  const passwordEl = document.getElementById("password");
+
+  const username = usernameEl.value.trim();
+  const password = passwordEl.value.trim();
+  const loading = document.getElementById("loading");
+
+  if(!username || !password){
+    alert("Isi semua field");
+    return;
+  }
+
+  loading.style.display = "block";
+
+  const snapshot = await getDocs(collection(db,"users"));
+
+  let exist = false;
+
+  snapshot.forEach(docSnap=>{
+    if(docSnap.data().username === username){
+      exist = true;
+    }
+  });
+
+  if(exist){
+    loading.style.display = "none";
+    alert("Username sudah dipakai");
+    return;
+  }
+
+  const id = "USR" + Date.now();
+
+  // USERS
+  await setDoc(doc(db,"users",id),{
+    username,
+    password,
+    role: "driver",
+    driverId: id
+  });
+
+  // DRIVERS
+  await setDoc(doc(db,"drivers",id),{
+    driverId: id,
+    namaDriver: username,
+    username,
+    createdAt: Date.now()
+  });
+
+  loading.style.display = "none";
+
+  alert("Berhasil daftar! Silakan login");
+
+  // 🔥 ISI ULANG INPUT (FIX UTAMA)
+  usernameEl.value = username;
+  passwordEl.value = password;
+
+  // pindah ke login
+  if(mode === "register"){
+    toggleMode();
+  }
+
+  // ================= OPTIONAL AUTO LOGIN =================
+  /*
+  localStorage.setItem("login","true");
+  localStorage.setItem("username",username);
+  localStorage.setItem("role","driver");
+  localStorage.setItem("driverId",id);
+
+  window.location.href = "driver.html";
+  */
+};
+
+// ================= LOGIN =================
+window.login = async function(){
+
+  const username = document.getElementById("username").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const loading = document.getElementById("loading");
+
+  if(!username || !password){
+    alert("Isi username & password");
+    return;
+  }
+
+  loading.style.display = "block";
+
+  const snapshot = await getDocs(collection(db,"users"));
+
+  let found = null;
+
+  snapshot.forEach(docSnap=>{
+    const u = docSnap.data();
+    if(u.username === username && u.password === password){
+      found = u;
+    }
+  });
+
+  loading.style.display = "none";
+
+  if(!found){
+    alert("Login gagal");
+    return;
+  }
+
+  // simpan session
+  localStorage.setItem("login","true");
+  localStorage.setItem("username",found.username);
+  localStorage.setItem("role",found.role);
+  localStorage.setItem("driverId",found.driverId);
+
+ // redirect
+if(found.role === "admin"){
+  window.location.href = "dashboard.html";
+} else {
+  window.location.href = "input.html";
+}
+};
+
+</script>
+
+</body>
+</html>

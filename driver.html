@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manajemen Driver</title>
+
+<style>
+body{font-family:Arial;background:#f4f6f9;margin:0}
+.sidebar{position:fixed;top:0;left:-100%;width:220px;height:100%;background:#1e293b;color:#fff;padding:20px 12px;z-index:1000;transition:.3s}
+.sidebar.show{left:0}
+.sidebar h3{text-align:center;margin-bottom:20px}
+.sidebar a{display:block;padding:10px;margin-bottom:6px;border-radius:10px;text-decoration:none;color:#cbd5f5;font-size:14px}
+.sidebar a:hover{background:#334155}
+.sidebar a.active{background:#1e90ff;color:#fff}
+.overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.3);display:none;z-index:998}
+.overlay.show{display:block}
+.content{padding:16px}
+.menu-toggle{position:fixed;top:10px;left:10px;width:32px;height:32px;background:#1e90ff;color:#fff;border:none;border-radius:8px;font-size:18px;z-index:1100}
+.card{font-size:13px;background:#fff;border-radius:14px;padding:14px;margin-bottom:12px;box-shadow:0 6px 18px rgba(0,0,0,0.08)}
+input,button{padding:8px;border-radius:8px;border:1px solid #ddd;font-size:12px;width:100%;margin-bottom:8px;box-sizing:border-box}
+button{background:#1e90ff;color:#fff;border:none;cursor:pointer;font-weight:600}
+.driver-item{padding:12px;border-bottom:1px solid #eee}
+.small{font-size:12px;color:#666}
+.actions{display:flex;gap:6px;margin-top:8px}
+.edit{background:orange}
+.delete{background:red}
+.popup{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);display:none;justify-content:center;align-items:center;z-index:2000}
+.popup-content{background:#fff;padding:20px;border-radius:14px;width:90%;max-width:320px}
+.btn-cancel{background:#aaa}
+.header-driver{background:#cbd5f5;color:#111;font-weight:600;font-size:16px}
+</style>
+</head>
+<body>
+
+<button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+
+<div id="sidebar" class="sidebar">
+  <h3>🚌 School Bus</h3>
+  <a href="dashboard.html">🏠 Dashboard</a>
+  <a href="input.html">📝 Input Perjalanan</a>
+  <a href="lapor.html">📊 Laporan</a>
+  <a href="cari.html">✏️ Edit</a>
+  <a href="driver.html" class="active">🧑‍✈️ Driver</a>
+  <a href="config.html" id="menuConfig">⚙️ Setting</a>
+  <hr>
+  <a href="#" onclick="logout()">🚪 Logout</a>
+</div>
+
+<div id="overlay" class="overlay"></div>
+
+<div class="content">
+<h4 id="formTitle">➕ Tambah Driver</h4>
+
+<div class="card">
+  <input type="text" id="nama" placeholder="Nama Lengkap Driver">
+  <input type="text" id="noHp" placeholder="No HP">
+  <input type="text" id="alamat" placeholder="Alamat">
+  <input type="date" id="tglInput">
+  <input type="password" id="password" placeholder="Password default: 123456">
+  <button id="btnSave" onclick="saveDriver()">Simpan</button>
+  <button id="btnCancel" onclick="cancelEdit()" style="display:none;background:#aaa;">Batal</button>
+</div>
+
+<div class="card">
+  <h4>📋 List Driver</h4>
+  <div id="list"></div>
+</div>
+
+<div id="popupEdit" class="popup">
+  <div class="popup-content">
+    <h3>Edit Driver</h3>
+    <input type="text" id="editNama">
+    <input type="text" id="editNoHp">
+    <input type="text" id="editAlamat">
+    <input type="date" id="editTgl">
+    <input type="password" id="editPassword" placeholder="Password baru, kosongkan jika tidak diganti">
+    <button onclick="updateDriver()">Update</button>
+    <button onclick="closePopup()" class="btn-cancel">Batal</button>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, addDoc, deleteDoc, updateDoc, doc, onSnapshot, query, orderBy, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBxbArCZ6iIWQ8wS7QIonZOeN4t_r9o2WU",
+  authDomain: "schoolbus-6a7fd.firebaseapp.com",
+  projectId: "schoolbus-6a7fd",
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const namaEl = document.getElementById("nama");
+const noHpEl = document.getElementById("noHp");
+const alamatEl = document.getElementById("alamat");
+const tglEl = document.getElementById("tglInput");
+const passEl = document.getElementById("password");
+const listEl = document.getElementById("list");
+
+const role = (localStorage.getItem("role") || "").toLowerCase();
+const userLogin = localStorage.getItem("username") || "";
+
+if(role !== "admin"){
+  const menu = document.getElementById("menuConfig");
+  if(menu) menu.style.display = "none";
+}
+
+window.toggleSidebar = function(){
+  document.getElementById("sidebar").classList.toggle("show");
+  document.getElementById("overlay").classList.toggle("show");
+};
+
+document.getElementById("overlay").onclick = ()=>{
+  document.getElementById("sidebar").classList.remove("show");
+  document.getElementById("overlay").classList.remove("show");
+};
+
+let drivers = [];
+let editId = null;
+
+let q;
+if(role === "admin"){
+  q = query(collection(db,"drivers"), orderBy("createdAt","desc"));
+}else{
+  q = query(collection(db,"drivers"), where("user","==",userLogin));
+}
+
+onSnapshot(q, snap=>{
+  drivers = [];
+  snap.forEach(d=>{
+    drivers.push({id:d.id, ...d.data()});
+  });
+  render(drivers);
+});
+
+window.saveDriver = async function(){
+  const nama = namaEl.value.trim();
+  const noHp = noHpEl.value.trim();
+  const alamat = alamatEl.value.trim();
+  const tgl = tglEl.value;
+  const password = passEl.value.trim() || "123456";
+
+  if(!nama || !noHp || !alamat || !tgl){
+    alert("Lengkapi semua data");
+    return;
+  }
+
+  const username = nama.toLowerCase().replace(/\s+/g,'');
+  const driverId = "USR" + Date.now();
+
+  try {
+    // 1. Simpan ke drivers
+    await addDoc(collection(db,"drivers"),{
+      driverId: driverId,
+      nama,
+      noHp,
+      alamat,
+      tglInput: tgl,
+      user: userLogin,
+      username: username,
+      createdAt: Date.now()
+    });
+
+    // 2. Simpan ke users buat login
+    await setDoc(doc(db,"users", driverId), {
+      driverId: driverId,
+      nama: nama,
+      namaDriver: nama,
+      username: username,
+      password: password,
+      role: "driver",
+      createdAt: Date.now()
+    });
+
+    alert(`✅ Driver berhasil disimpan\nUsername: ${username}\nPassword: ${password}`);
+    resetForm();
+  } catch(e) {
+    console.error(e);
+    alert("Gagal simpan: " + e.message);
+  }
+};
+
+window.del = async function(id, dataUser){
+  if(role !== "admin" && dataUser !== userLogin){
+    alert("Tidak punya akses");
+    return;
+  }
+  if(confirm("Hapus driver ini?")){
+    await deleteDoc(doc(db,"drivers",id));
+  }
+};
+
+window.edit = function(d){
+  if(role !== "admin" && d.user !== userLogin){
+    alert("Tidak punya akses");
+    return;
+  }
+  editId = d.id;
+  document.getElementById("editNama").value = d.nama || "";
+  document.getElementById("editNoHp").value = d.noHp || "";
+  document.getElementById("editAlamat").value = d.alamat || "";
+  document.getElementById("editTgl").value = d.tglInput || "";
+  document.getElementById("popupEdit").style.display = "flex";
+};
+
+window.updateDriver = async function(){
+  const nama = document.getElementById("editNama").value.trim();
+  const pass = document.getElementById("editPassword").value.trim();
+  
+  await updateDoc(doc(db,"drivers",editId),{
+    nama: nama,
+    noHp: document.getElementById("editNoHp").value,
+    alamat: document.getElementById("editAlamat").value,
+    tglInput: document.getElementById("editTgl").value
+  });
+
+  // Update juga di users kalau ada password baru
+  const driverData = drivers.find(x => x.id === editId);
+  if(driverData && driverData.driverId){
+    const updateData = { nama: nama, namaDriver: nama };
+    if(pass) updateData.password = pass;
+    await updateDoc(doc(db,"users",driverData.driverId), updateData);
+  }
+
+  closePopup();
+};
+
+window.closePopup = function(){
+  document.getElementById("popupEdit").style.display = "none";
+};
+
+function render(data){
+  let html = "";
+  data.forEach(d=>{
+    const namaTampil = d.nama || d.namaDriver || d.username || "Tanpa Nama";
+    html += `
+    <div class="driver-item">
+      <b>${namaTampil}</b><br>
+      <span class="small">HP: ${d.noHp || "-"}</span><br>
+      <span class="small">Alamat: ${d.alamat || "-"}</span><br>
+      <span class="small">Username: ${d.username || "-"}</span>
+      ${(role === "admin" || d.user === userLogin) ? `
+      <div class="actions">
+        <button class="edit" onclick='edit(${JSON.stringify(d)})'>Edit</button>
+        <button class="delete" onclick="del('${d.id}','${d.user}')">Hapus</button>
+      </div>
+      ` : ""}
+    </div>
+    `;
+  });
+  listEl.innerHTML = html || "Tidak ada data";
+}
+
+function resetForm(){
+  namaEl.value = "";
+  noHpEl.value = "";
+  alamatEl.value = "";
+  tglEl.value = "";
+  passEl.value = "";
+}
+
+window.logout = function(){
+  localStorage.clear();
+  window.location.href = "index.html";
+};
+</script>
+</body>
+</html>
