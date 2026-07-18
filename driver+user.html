@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manajemen Driver & User</title>
+
+<style>
+body{font-family:Arial;background:#f4f6f9;margin:0}
+.sidebar{position:fixed;top:0;left:-100%;width:240px;height:100%;background:#1e293b;color:#fff;padding:20px 12px;z-index:1000;transition:.3s;overflow-y:auto}
+.sidebar.show{left:0}
+.sidebar h3{text-align:center;margin-bottom:20px}
+.sidebar a{display:block;padding:10px;margin-bottom:6px;border-radius:10px;text-decoration:none;color:#cbd5f5;font-size:14px}
+.sidebar a:hover{background:#334155}
+.sidebar a.active{background:#1e90ff;color:#fff}
+.overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.3);display:none;z-index:998}
+.overlay.show{display:block}
+.content{padding:16px;max-width:800px;margin:0 auto;padding-top:60px}
+.menu-toggle{position:fixed;top:10px;left:10px;width:38px;height:38px;background:#1e90ff;color:#fff;border:none;border-radius:10px;font-size:18px;z-index:1100}
+.card{background:#fff;border-radius:14px;padding:16px;margin-bottom:16px;box-shadow:0 6px 18px rgba(0,0,0,0.08)}
+input,select,button{padding:12px;border-radius:10px;border:1px solid #ddd;font-size:14px;width:100%;margin-bottom:10px;box-sizing:border-box}
+button{background:#1e90ff;color:#fff;border:none;cursor:pointer;font-weight:700}
+.driver-item{padding:12px;border:1px solid #eee;border-radius:10px;margin-bottom:8px}
+.small{font-size:12px;color:#666}
+.actions{display:flex;gap:8px;margin-top:8px}
+.icon-btn{width:36px;height:36px;border:none;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;color:#fff}
+.edit{background:orange}
+.hapus{background:red}
+.popup{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);display:none;justify-content:center;align-items:center;z-index:2000}
+.popup-content{background:#fff;padding:20px;border-radius:14px;width:90%;max-width:400px}
+.btn-cancel{background:#aaa}
+.tabs{display:flex;gap:8px;margin-bottom:15px}
+.tab-btn{flex:1;background:#e5e7eb;color:#111}
+.tab-btn.active{background:#1e90ff;color:#fff}
+.hidden{display:none}
+.header-title{text-align:center;color:#1e90ff;margin-bottom:15px}
+</style>
+</head>
+<body>
+
+<button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+<div id="overlay" class="overlay" onclick="toggleSidebar()"></div>
+
+<div id="sidebar" class="sidebar">
+  <h3>🚌 School Bus</h3>
+  <a href="dashboard.html">🏠 Dashboard</a>
+  <a href="input.html">📝 Input Perjalanan</a>
+  <a href="lapor.html">📊 Laporan</a>
+  <a href="cari.html">✏️ Edit</a>
+  <a href="driver.html" class="active">🧑‍✈️ Driver & User</a>
+  <a href="config.html">⚙️ Setting</a>
+  <hr>
+  <a href="#" onclick="logout()">🚪 Logout</a>
+</div>
+
+<div class="content">
+  <h2 class="header-title">Manajemen Driver & User</h2>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('driver')">Data Driver</button>
+    <button class="tab-btn" onclick="showTab('user')">Data User Login</button>
+  </div>
+
+  <!-- TAB DRIVER -->
+  <div id="tab-driver">
+    <div class="card">
+      <h4 id="formTitle">➕ Tambah Driver</h4>
+      <input type="text" id="nama" placeholder="Nama Lengkap Driver">
+      <input type="text" id="noHp" placeholder="No HP">
+      <input type="text" id="alamat" placeholder="Alamat">
+      <input type="date" id="tglInput">
+      <input type="password" id="password" placeholder="Password default: 123456">
+      <button id="btnSave" onclick="saveDriver()">Simpan Driver</button>
+      <button id="btnCancel" onclick="cancelEdit()" style="display:none;background:#aaa;">Batal</button>
+    </div>
+    <div class="card">
+      <h4>📋 List Driver</h4>
+      <div id="listDriver"></div>
+    </div>
+  </div>
+
+  <!-- TAB USER -->
+  <div id="tab-user" class="hidden">
+    <div class="card">
+      <h4>➕ Tambah User Manual</h4>
+      <input type="text" id="username" placeholder="Username">
+      <input type="text" id="passwordUser" placeholder="Password">
+      <select id="role" onchange="toggleDriver()">
+        <option value="admin">Admin</option>
+        <option value="driver">Driver</option>
+      </select>
+      <select id="driverId" style="display:none">
+        <option value="">-- Pilih Driver --</option>
+      </select>
+      <button onclick="simpanUser()">Simpan User</button>
+    </div>
+    <div class="card">
+      <h4>👤 List User Login</h4>
+      <div id="listUser"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- POPUP EDIT DRIVER -->
+<div id="popupEdit" class="popup">
+  <div class="popup-content">
+    <h3>Edit Driver</h3>
+    <input type="text" id="editNama">
+    <input type="text" id="editNoHp">
+    <input type="text" id="editAlamat">
+    <input type="date" id="editTgl">
+    <input type="password" id="editPassword" placeholder="Password baru, kosongkan jika tidak diganti">
+    <button onclick="updateDriver()">Update</button>
+    <button onclick="closePopup()" class="btn-cancel">Batal</button>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, addDoc, deleteDoc, updateDoc, doc, onSnapshot, query, orderBy, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBxbArCZ6iIWQ8wS7QIonZOeN4t_r9o2WU",
+  authDomain: "schoolbus-6a7fd.firebaseapp.com",
+  projectId: "schoolbus-6a7fd",
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const role = (localStorage.getItem("role") || "").toLowerCase();
+const userLogin = localStorage.getItem("username") || "";
+if(role!== "admin"){ window.location.href = "dashboard.html"; }
+
+let drivers = []; let users = []; let editId = null;
+let driverMap = {}; // {docId: nama}
+
+// ===== SIDEBAR =====
+window.toggleSidebar = function(){ document.getElementById("sidebar").classList.toggle("show"); document.getElementById("overlay").classList.toggle("show"); }
+window.logout = function(){ localStorage.clear(); window.location.href = "index.html"; }
+
+// ===== TABS =====
+window.showTab = function(tab){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('#tab-driver, #tab-user').forEach(t=>t.classList.add('hidden'));
+  document.getElementById('tab-'+tab).classList.remove('hidden');
+  document.querySelector(`.tab-btn[onclick="showTab('${tab}')"]`).classList.add('active');
+}
+
+// ===== DRIVER REALTIME =====
+onSnapshot(query(collection(db,"drivers"), orderBy("createdAt","desc")), snap=>{
+  drivers = []; driverMap = {};
+  snap.forEach(d=>{ drivers.push({id:d.id,...d.data()}); driverMap[d.id] = d.data().nama; });
+  renderDriver(drivers);
+  renderDriverSelect(); // update dropdown user
+});
+
+// ===== USER REALTIME =====
+onSnapshot(query(collection(db,"users"), orderBy("createdAt","desc")), snap=>{
+  users = [];
+  snap.forEach(d=>{ users.push({id:d.id,...d.data()}); });
+  renderUser(users);
+});
+
+// ===== DRIVER CRUD =====
+window.saveDriver = async function(){
+  const nama = document.getElementById("nama").value.trim();
+  const noHp = document.getElementById("noHp").value.trim();
+  const alamat = document.getElementById("alamat").value.trim();
+  const tgl = document.getElementById("tglInput").value;
+  const password = document.getElementById("password").value.trim() || "123456";
+  if(!nama ||!noHp ||!alamat ||!tgl){ alert("Lengkapi semua data"); return; }
+
+  const username = nama.toLowerCase().replace(/\s+/g,'');
+  const driverId = username; // 🔥 KUNCI UTAMA: ID SAMA
+
+  try {
+    await setDoc(doc(db,"drivers", driverId),{ driverId, nama, namaDriver: nama, noHp, alamat, tglInput: tgl, username, user: userLogin, createdAt: Date.now() });
+    await setDoc(doc(db,"users", driverId), { driverId, namaDriver: nama, username, password, role: "driver", createdAt: Date.now() });
+    alert(`✅ Berhasil\nUsername: ${username}\nPassword: ${password}`);
+    resetFormDriver();
+  } catch(e) { alert("Gagal: " + e.message); }
+}
+
+window.editDriver = function(d){
+  editId = d.id;
+  document.getElementById("editNama").value = d.nama || "";
+  document.getElementById("editNoHp").value = d.noHp || "";
+  document.getElementById("editAlamat").value = d.alamat || "";
+  document.getElementById("editTgl").value = d.tglInput || "";
+  document.getElementById("popupEdit").style.display = "flex";
+}
+
+window.updateDriver = async function(){
+  const nama = document.getElementById("editNama").value.trim();
+  const pass = document.getElementById("editPassword").value.trim();
+  const driverData = drivers.find(x => x.id === editId); if(!driverData) return;
+  const driverId = driverData.driverId;
+
+  await updateDoc(doc(db,"drivers", driverId),{ nama, namaDriver: nama, noHp: document.getElementById("editNoHp").value, alamat: document.getElementById("editAlamat").value, tglInput: document.getElementById("editTgl").value });
+
+  const userUpdate = { namaDriver: nama };
+  if(pass) userUpdate.password = pass;
+  await updateDoc(doc(db,"users", driverId), userUpdate);
+
+  closePopup();
+}
+
+window.deleteDriver = async function(id){
+  if(!confirm("Hapus driver + user login ini?")) return;
+  const driverData = drivers.find(x => x.id === id);
+  if(driverData && driverData.driverId){
+    await deleteDoc(doc(db,"drivers", driverData.driverId));
+    await deleteDoc(doc(db,"users", driverData.driverId));
+  }
+}
+
+function renderDriver(data){
+  let html = "";
+  data.forEach(d=>{
+    html += `<div class="driver-item">
+      <b>${d.nama}</b><br>
+      <span class="small">HP: ${d.noHp || "-"} | Username: ${d.username}</span>
+      <div class="actions">
+        <button class="icon-btn edit" onclick='editDriver(${JSON.stringify(d)})'>✏️</button>
+        <button class="icon-btn hapus" onclick="deleteDriver('${d.id}')">🗑️</button>
+      </div>
+    </div>`;
+  });
+  document.getElementById("listDriver").innerHTML = html || "Belum ada data";
+}
+function resetFormDriver(){ document.getElementById("nama").value=""; document.getElementById("noHp").value=""; document.getElementById("alamat").value=""; document.getElementById("tglInput").value=""; document.getElementById("password").value=""; }
+window.closePopup = function(){ document.getElementById("popupEdit").style.display = "none"; }
+window.cancelEdit = resetFormDriver;
+
+// ===== USER CRUD =====
+window.toggleDriver = function(){ document.getElementById("driverId").style.display = document.getElementById("role").value === "driver"? "block" : "none"; }
+function renderDriverSelect(){
+  const select = document.getElementById("driverId");
+  select.innerHTML = '<option value="">-- Pilih Driver --</option>';
+  drivers.forEach(d=>{ const opt = document.createElement("option"); opt.value = d.driverId; opt.textContent = d.nama; select.appendChild(opt); });
+}
+
+window.simpanUser = async function(){
+  const username = document.getElementById("username").value.trim().toLowerCase();
+  const password = document.getElementById("passwordUser").value.trim();
+  const roleInput = document.getElementById("role").value;
+  const driverId = document.getElementById("driverId").value;
+  const namaDriver = driverMap[driverId] || "";
+  if(!username ||!password){ alert("Username & password wajib"); return; }
+  if(roleInput === "driver" &&!driverId){ alert("Pilih driver"); return; }
+
+  try{
+    await setDoc(doc(db, "users", username), { username, password, role: roleInput, driverId: roleInput==="driver"?driverId:"", namaDriver: namaDriver, createdAt: Date.now() });
+    if(roleInput === "driver"){ // auto bikin driver juga
+      await setDoc(doc(db, "drivers", driverId), { driverId, nama: namaDriver, namaDriver, username, user: userLogin, createdAt: Date.now() });
+    }
+    alert("User berhasil disimpan");
+    document.getElementById("username").value=""; document.getElementById("passwordUser").value="";
+  }catch(err){ alert("Gagal: "+err.message); }
+}
+
+window.deleteUser = async function(id){
+  if(!confirm("Hapus user ini?")) return;
+  await deleteDoc(doc(db,"users",id));
+}
+
+function renderUser(data){
+  let html="";
+  data.forEach(u=>{
+    if(u.role === "admin" && u.username!== "admin") return; // sembunyikan admin lain
+    html += `<div class="driver-item">
+      <div style="display:flex;justify-content:space-between">
+        <b>${u.username}</b><span>${u.role}</span>
+      </div>
+      <span class="small">Driver: ${u.namaDriver || "-"}</span>
+      <div class="actions">
+        <button class="icon-btn hapus" onclick="deleteUser('${u.id}')">🗑️</button>
+      </div>
+    </div>`;
+  });
+  document.getElementById("listUser").innerHTML = html || "Belum ada user";
+}
+</script>
+</body>
+</html>

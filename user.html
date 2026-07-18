@@ -462,48 +462,37 @@ function loadUserRealtime() {
 
 // ================= SIMPAN USER =================
 async function simpanUser() {
-  const username = document.getElementById("username").value.trim();
+  const username = document.getElementById("username").value.trim().toLowerCase();
   const password = document.getElementById("password").value.trim();
   const roleInput = document.getElementById("role").value;
   const driverId = document.getElementById("driverId").value;
+  const namaDriver = driverMap[driverId] || "";
 
-  if (!username || !password) {
-    alert("Username & password wajib diisi");
-    return;
-  }
-
-  if (roleInput === "driver" && !driverId) {
-    alert("Driver wajib dipilih");
-    return;
-  }
+  if (!username ||!password) { alert("Username & password wajib"); return; }
 
   const payload = {
-    username,
-    password,
-    role: roleInput,
-    driverId: roleInput === "driver" ? driverId : "",
-    driverName: roleInput === "driver" ? driverMap[driverId] : "",
+    username, password, role: roleInput,
+    driverId: roleInput === "driver"? driverId : "",
+    namaDriver: roleInput === "driver"? namaDriver : "", // 🔥 PENTING
     updatedAt: new Date()
   };
 
   try {
-    if (editId) {
-      await updateDoc(doc(db, "users", editId), payload);
-    } else {
-      await addDoc(collection(db, "users"), payload);
-    }
+    await setDoc(doc(db, "users", username), payload); // 🔥 ID = username
 
-    // sinkron ke driver
+    // 🔥 KALAU ROLE DRIVER, AUTO BIKIN DI DRIVERS JUGA
     if (roleInput === "driver" && driverId) {
-      await updateDoc(doc(db, "drivers", driverId), {
-        username: username
+      await setDoc(doc(db, "drivers", driverId), {
+        driverId,
+        nama: namaDriver,
+        namaDriver: namaDriver, // 🔥 SAMA
+        username,
+        user: localStorage.getItem("username"),
+        createdAt: Date.now()
       });
     }
-
     resetForm();
-  } catch (err) {
-    alert("Gagal simpan: " + err.message);
-  }
+  } catch (err) { alert("Gagal: " + err.message); }
 }
 
 window.simpanUser = simpanUser;

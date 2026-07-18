@@ -143,53 +143,65 @@ window.saveDriver = async function(){
   const tgl = tglEl.value;
   const password = passEl.value.trim() || "123456";
 
-  if(!nama || !noHp || !alamat || !tgl){
-    alert("Lengkapi semua data");
-    return;
+  if(!nama ||!noHp ||!alamat ||!tgl){
+    alert("Lengkapi semua data"); return;
   }
 
-  const username = nama.toLowerCase().replace(/\s+/g,'');
-  const driverId = "USR" + Date.now();
+  const username = nama.toLowerCase().replace(/\s+/g,''); // "Nur Ali" -> "nurali"
+  const driverId = username; // 🔥 INI KUNCINYA
 
   try {
     // 1. Simpan ke drivers
-    await addDoc(collection(db,"drivers"),{
-      driverId: driverId,
-      nama,
-      noHp,
-      alamat,
-      tglInput: tgl,
-      user: userLogin,
-      username: username,
+    await setDoc(doc(db,"drivers", driverId),{
+      driverId, nama, noHp, alamat, tglInput: tgl,
+      username, namaDriver: nama, // 🔥 tambah namaDriver
+      user: userLogin, createdAt: Date.now()
+    });
+
+    // 2. Simpan ke users
+    await setDoc(doc(db,"users", driverId), { // 🔥 ID SAMA
+      driverId,
+      namaDriver: nama, // 🔥 INI BUAT FILTER DI CARI.HTML
+      username, password, role: "driver",
       createdAt: Date.now()
     });
 
-    // 2. Simpan ke users buat login
-    await setDoc(doc(db,"users", driverId), {
-      driverId: driverId,
-      nama: nama,
-      namaDriver: nama,
-      username: username,
-      password: password,
-      role: "driver",
-      createdAt: Date.now()
-    });
-
-    alert(`✅ Driver berhasil disimpan\nUsername: ${username}\nPassword: ${password}`);
+    alert(`✅ Driver berhasil\nUsername: ${username}\nPassword: ${password}`);
     resetForm();
-  } catch(e) {
-    console.error(e);
-    alert("Gagal simpan: " + e.message);
-  }
+  } catch(e) { alert("Gagal: " + e.message); }
 };
 
-window.del = async function(id, dataUser){
-  if(role !== "admin" && dataUser !== userLogin){
-    alert("Tidak punya akses");
-    return;
-  }
-  if(confirm("Hapus driver ini?")){
-    await deleteDoc(doc(db,"drivers",id));
+window.updateDriver = async function(){
+  const nama = document.getElementById("editNama").value.trim();
+  const pass = document.getElementById("editPassword").value.trim();
+  const driverData = drivers.find(x => x.id === editId);
+  if(!driverData) return;
+  const driverId = driverData.driverId;
+
+  const dataUpdate = {
+    nama, namaDriver: nama, // 🔥 update dua2nya
+    noHp: document.getElementById("editNoHp").value,
+    alamat: document.getElementById("editAlamat").value,
+    tglInput: document.getElementById("editTgl").value
+  };
+
+  // 1. Update drivers
+  await updateDoc(doc(db,"drivers", driverId), dataUpdate);
+
+  // 2. Update users
+  const userUpdate = { namaDriver: nama };
+  if(pass) userUpdate.password = pass;
+  await updateDoc(doc(db,"users", driverId), userUpdate);
+
+  closePopup();
+};
+
+window.del = async function(id){
+  if(!confirm("Hapus driver + user login ini?")) return;
+  const driverData = drivers.find(x => x.id === id);
+  if(driverData && driverData.driverId){
+    await deleteDoc(doc(db,"drivers", driverData.driverId)); // hapus driver
+    await deleteDoc(doc(db,"users", driverData.driverId)); // hapus user
   }
 };
 
