@@ -6,6 +6,45 @@
 <title>Login System</title>
 
 <style>
+  /* 🔥 FIX ANTI LUBER DI APK */
+html, body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden; /* kunci geser ke samping */
+}
+
+* {
+  box-sizing: border-box; /* biar padding ga nambahin lebar */
+}
+
+.card, .table-wrapper {
+  width: 100%;
+  max-width: 100%;
+}
+
+.table-wrapper {
+  overflow-x: auto; /* tabel boleh scroll ke samping, tapi halamannya jangan */
+  -webkit-overflow-scrolling: touch; /* biar smooth di HP */
+}
+
+table {
+  min-width: 100%; /* 🔥 JANGAN 700px. Biar ngikutin layar */
+  width: max-content; /* tapi kalau isinya banyak tetap bisa scroll */
+}
+  @media(max-width:768px){
+  body{margin-left:0; padding:10px} /* 🔥 padding dikecilin biar ga luber */
+  .sidebar{left:-240px;transition:.3s}
+  .sidebar.show{left:0}
+  .menu-toggle{display:block;position:fixed;top:10px;left:10px;background:#1e90ff;color:#fff;border:none;padding:8px 10px;border-radius:8px;z-index:1100}
+  
+  th, td{font-size:11px;padding:6px;white-space:nowrap}
+  h2{font-size:16px}
+  .card{padding:10px}
+  
+  /* 🔥 TAMBAHAN BUAT APK */
+  .filter-container{flex-direction:column} /* filter numpuk ke bawah */
+  .btn{width:100%; margin-bottom:8px} /* tombol full */
+}
 body{
   font-family:Arial;
   background:#f4f6f9;
