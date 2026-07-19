@@ -113,9 +113,10 @@ body{margin-left:230px}
           <th>No</th>
           <th>Siswa</th>
           <th>Kelas</th>
+         <th>Trayek</th>
           <th>Alamat</th>
+          <th>No tlp</th>
           <th>Jarak</th>
-          <th>Trayek</th>
           <th>Total</th>
         </tr>
       </thead>
@@ -275,7 +276,7 @@ function renderTable() {
 
   Object.keys(group).forEach(driver => {
     let total = 0;
-    body.innerHTML += `<tr><td colspan="7" class="header-driver">🚐 ${driver}</td></tr>`;
+    body.innerHTML += `<tr><td colspan="8" class="header-driver">🚐 ${driver}</td></tr>`;
     group[driver].forEach((d, i) => {
       total += Number(d.total || 0);
       grandTotal += Number(d.total || 0);
@@ -284,9 +285,10 @@ function renderTable() {
           <td>${i + 1}</td>
           <td>${d.namaSiswa || d.nama || d.siswa || "-"}</td>
           <td>${d.kelas || "-"}</td>
-          <td>${d.alamat || "-"}</td>
-          <td>${d.jarak || 0} Km</td>
           <td>${(d.trayek || "-").toUpperCase()}</td>
+          <td>${d.alamat || "-"}</td>
+          <td>${d.noTelepon || "-"}</td>
+          <td>${d.jarak || 0} Km</td>
           <td>${rupiah(d.total)}</td>
         </tr>
       `;
@@ -294,9 +296,9 @@ function renderTable() {
     const potongan = total * 0.1;
     const dibayar = total - potongan;
     body.innerHTML += `
-      <tr class="row-total"><td colspan="6">Total</td><td>${rupiah(total)}</td></tr>
-      <tr class="row-potongan"><td colspan="6">Potongan 10%</td><td>${rupiah(potongan)}</td></tr>
-      <tr class="row-bayar"><td colspan="6">Dibayarkan</td><td>${rupiah(dibayar)}</td></tr>
+      <tr class="row-total"><td colspan="7">Total</td><td>${rupiah(total)}</td></tr>
+      <tr class="row-potongan"><td colspan="7">Potongan 10%</td><td>${rupiah(potongan)}</td></tr>
+      <tr class="row-bayar"><td colspan="7">Dibayarkan</td><td>${rupiah(dibayar)}</td></tr>
     `;
   });
 
@@ -411,17 +413,18 @@ window.exportPDF = function () {
           i + 1,
           d.namaSiswa || d.nama || "-",
           d.kelas || "-",
-          d.alamat || "-",
-          (d.jarak || 0) + " Km",
           (d.trayek || "-").toUpperCase(),
-          rupiah(d.total)
+          d.alamat || "-",
+          d.noTelepon || "-",
+          (d.jarak || 0) + " Km",
+               rupiah(d.total)
         ];
 
       });
 
       doc.autoTable({
         startY: y,
-        head: [["No","Siswa","Kelas","Alamat","Jarak","Trayek","Total"]],
+        head: [["No","Siswa","Kelas","Trayek","Alamat","No.Tlp","Jarak","Total"]],
         body: rows,
         styles:{fontSize:9},
         headStyles:{fillColor:[30,144,255]}
@@ -479,3 +482,4 @@ window.logout = function(){
 </script>
 </body>
 </html>
+

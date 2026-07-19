@@ -18,33 +18,33 @@
       --border:#dbe3ee;--shadow:0 8px 24px rgba(15,23,42,.08);--radius:18px;
     }
     body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);padding:16px;padding-bottom:90px;max-width:760px;margin:0 auto}
-   .topbar{background:linear-gradient(135deg,#1e90ff,#60a5fa);color:#fff;border-radius:22px;padding:20px;margin-bottom:16px;box-shadow:0 12px 30px rgba(30,144,255,.20)}
-   .topbar-title{font-size:24px;font-weight:700;margin-bottom:6px}
-   .topbar-subtitle{font-size:13px;line-height:1.6;opacity:.95}
-   .card{background:var(--card);border-radius:var(--radius);padding:16px;margin-bottom:16px;box-shadow:var(--shadow);border:1px solid #edf2f7}
+  .topbar{background:linear-gradient(135deg,#1e90ff,#60a5fa);color:#fff;border-radius:22px;padding:20px;margin-bottom:16px;box-shadow:0 12px 30px rgba(30,144,255,.20)}
+  .topbar-title{font-size:24px;font-weight:700;margin-bottom:6px}
+  .topbar-subtitle{font-size:13px;line-height:1.6;opacity:.95}
+  .card{background:var(--card);border-radius:var(--radius);padding:16px;margin-bottom:16px;box-shadow:var(--shadow);border:1px solid #edf2f7}
     h3{margin-bottom:12px;color:#111827;font-size:18px}
     label{display:block;font-size:14px;font-weight:600;margin-bottom:6px;margin-top:12px;color:#374151}
     input,select,textarea{width:100%;border:1px solid var(--border);border-radius:12px;padding:12px 14px;font-size:14px;outline:none;background:#fff;transition:.2s ease}
     textarea{min-height:90px;resize:vertical;font-family:Arial,sans-serif}
     input:focus,select:focus,textarea:focus{border-color:var(--primary);box-shadow:0 0 0 4px rgba(30,144,255,.10)}
     input[readonly]{background:#f8fafc;color:#6b7280;font-weight:700}
-   .save{width:100%;border:none;border-radius:12px;padding:13px 14px;font-size:14px;font-weight:700;color:#fff;cursor:pointer;margin-top:14px;background:var(--primary);transition:.2s ease}
-   .save:hover{background:var(--primary-dark)}
-   .full{width:100%}
+  .save{width:100%;border:none;border-radius:12px;padding:13px 14px;font-size:14px;font-weight:700;color:#fff;cursor:pointer;margin-top:14px;background:var(--primary);transition:.2s ease}
+  .save:hover{background:var(--primary-dark)}
+  .full{width:100%}
     #previewTotal{margin-top:14px;padding:12px 14px;border-radius:12px;background:#eff6ff;color:#1d4ed8;font-weight:700;text-align:center;font-size:16px}
-   .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#111827;color:#fff;padding:12px 16px;border-radius:10px;opacity:0;pointer-events:none;transition:.25s;z-index:9999;max-width:90%;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.18)}
-   .toast.show{opacity:1}
-   .mini-note{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.5}
-   .section-box{padding:12px;border:1px dashed var(--border);border-radius:14px;margin-top:12px;background:#fafcff}
-   .sidebar{position:fixed;top:0;left:-260px;width:240px;height:100%;background:#0f3057;color:#fff;transition:0.3s;z-index:1000;padding-top:20px}
-   .sidebar.active{left:0}
-   .sidebar h2{text-align:center;margin-bottom:20px}
-   .sidebar a{display:block;padding:14px 20px;color:#fff;text-decoration:none}
-   .sidebar a:hover{background:#1e90ff}
-   .toggle-btn{position:fixed;top:12px;left:12px;background:#1e90ff;color:#fff;border:none;padding:10px;border-radius:10px;z-index:1100;cursor:pointer}
+  .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#111827;color:#fff;padding:12px 16px;border-radius:10px;opacity:0;pointer-events:none;transition:.25s;z-index:9999;max-width:90%;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.18)}
+  .toast.show{opacity:1}
+  .mini-note{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.5}
+  .section-box{padding:12px;border:1px dashed var(--border);border-radius:14px;margin-top:12px;background:#fafcff}
+  .sidebar{position:fixed;top:0;left:-260px;width:240px;height:100%;background:#0f3057;color:#fff;transition:0.3s;z-index:1000;padding-top:20px}
+  .sidebar.active{left:0}
+  .sidebar h2{text-align:center;margin-bottom:20px}
+  .sidebar a{display:block;padding:14px 20px;color:#fff;text-decoration:none}
+  .sidebar a:hover{background:#1e90ff}
+  .toggle-btn{position:fixed;top:12px;left:12px;background:#1e90ff;color:#fff;border:none;padding:10px;border-radius:10px;z-index:1100;cursor:pointer}
     @media(min-width:768px){
-     .sidebar{left:0}
-     .toggle-btn{display:none}
+    .sidebar{left:0}
+    .toggle-btn{display:none}
       body{margin-left:240px}
     }
     #driverCard label{font-weight:bold}
@@ -59,10 +59,10 @@
     <h2>🚌 School Bus</h2>
   </div>
   <div class="menu">
-    <a href="index.html">🏠 <span>Dashboard</span></a>
+    <a href="dashboard.html">🏠 <span>Dashboard</span></a>
     <a href="input.html">🚌 <span>Input</span></a>
-    <a href="lapor.html">📊 <span>Laporan</span></a>
-    <a href="driver.html" id="menuDriver">📊 <span>Driver</span></a>
+    <a href="lapor.html" id="menuLaporan">📊 <span>Laporan</span></a>
+    <a href="driver.html" id="menuDriver">🧑‍✈️ <span>Driver</span></a>
     <a href="cari.html">✏️ Edit</a>
     <a href="config.html" id="menuConfig">⚙️ <span>Setting</span></a>
     <a href="user.html" id="menuUser">👤 <span>User</span></a>
@@ -100,6 +100,9 @@
 
     <label>Alamat</label>
     <textarea id="alamat" placeholder="Masukkan alamat siswa"></textarea>
+
+    <label>No.Telepon</label>
+    <input type="tel" id="noTelepon" placeholder="Masukkan no.telepon"> <!-- 🔥 FIX -->
 
     <label>Jarak (Km)</label>
     <input type="number" id="jarak" step="0.1" placeholder="Masukkan jarak" oninput="updateHarga()">
@@ -187,7 +190,7 @@ async function loadDrivers(){
       const data = docSnap.data();
       daftarDriver.push({
         docId: docSnap.id,
-        nama: data.namaDriver || data.nama || data.username || "Tanpa Nama"
+        nama: data.namaDriver || data.nama || data.username || "Tanpa Nama" // 🔥 sinkron
       });
     });
     daftarDriver.sort((a,b)=>a.nama.localeCompare(b.nama,"id"));
@@ -272,9 +275,7 @@ async function loadConfigHarga(){
 
 function hitungHargaDasar(jarak){
   if (jarak <= 1) return configHarga.hargaDasar;
-
-  const titik = Math.round(((jarak - 1) + Number.EPSILON) * 10);
-
+  const titik = Math.ceil((jarak - 1) / 0.1); // 🔥 pake ceil biar 1.1 = 2 titik
   return configHarga.hargaDasar + (titik * configHarga.kenaikanPerTitik);
 }
 
@@ -347,22 +348,24 @@ async function simpanData(){
   const namaSiswa = document.getElementById("namaSiswa").value.trim();
   const kelas = document.getElementById("kelas").value.trim();
   const alamat = document.getElementById("alamat").value.trim();
+  const noTelepon = document.getElementById("noTelepon").value.trim(); // 🔥 FIX
   const jarak = Number(document.getElementById("jarak").value || 0);
   const trayek = document.getElementById("trayek").value;
   const total = hitungTotal();
 
   // 🔥 CEK DATA KOSONG
-  if(!tanggal ||!namaSiswa ||!kelas ||!alamat ||!jarak ||!trayek || total === 0){
+  if(!tanggal ||!namaSiswa ||!kelas ||!noTelepon ||!alamat ||!jarak ||!trayek || total === 0){
     showToast("Lengkapi semua data dulu");
     return;
   }
 
   const data = {
     driverId: selectedDriver.docId,
-    namaDriver: selectedDriver.nama,
+    namaDriver: selectedDriver.nama, // 🔥 PENTING BUAT FILTER CARI.HTML
     tanggal: tanggal,
     namaSiswa: namaSiswa,
     kelas: kelas,
+    noTelepon: noTelepon, // 🔥 FIX
     alamat: alamat,
     jarak: jarak,
     trayek: trayek,
@@ -377,6 +380,7 @@ async function simpanData(){
     document.getElementById("tanggalInput").value = getToday();
     document.getElementById("namaSiswa").value = "";
     document.getElementById("kelas").value = "";
+    document.getElementById("noTelepon").value = ""; // 🔥 FIX
     document.getElementById("alamat").value = "";
   }catch(e){
     showToast("Gagal simpan: " + e.message);
