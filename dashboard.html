@@ -11,72 +11,47 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   
   <style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
   *{box-sizing:border-box;margin:0;padding:0}
   :root{
-    --gojek:#1e90ff;
-    --gojek-dark:#0f6ecf;
-    --green:#00aa5b;
-    --red:#e63946;
-    --bg:#f6f7fb;
-    --card:#ffffff;
-    --text:#1f2937;
-    --muted:#6b7280;
-    --border:#e5e7eb;
+    --gojek:#1e90ff; --gojek-dark:#0f6ecf;
+    --green:#00aa5b; --red:#e63946;
+    --bg:#f6f7fb; --card:#ffffff; --text:#1f2937;
+    --muted:#6b7280; --border:#e5e7eb;
   }
   body{
     font-family:'Poppins',Arial,sans-serif;
-    background:var(--bg);
-    color:var(--text);
-    padding-bottom:90px;
-    max-width:760px;
-    margin:0 auto;
+    background:var(--bg); color:var(--text);
+    padding-bottom:90px; max-width:760px; margin:0 auto;
   }
 
   /* HEADER GOJEK */
   .header-gojek{
     background:linear-gradient(135deg,#1e90ff,#3b82f6);
-    padding:18px 16px 60px;
-    color:#fff;
-    border-radius:0 0 28px 28px;
+    padding:18px 16px 60px; color:#fff; border-radius:0 0 28px 28px;
   }
   .header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
-  .header-top h2{font-size:16px;font-weight:700}
-  .header-top .icon{display:flex;gap:12px}
-  .header-top .icon div{background:rgba(255,255,255,.2);padding:8px;border-radius:50%}
-.brand img {
-  width: 40px;
-  height: 40px;
-  border-radius: 12px; /* kotak rounded biar modern */
-  object-fit: cover;
-  background: #fff;
-  padding: 3px;
-  box-shadow:0 2px 6px rgba(0,0,0,0.1)
-}
+  .brand{display:flex;align-items:center;gap:10px}
+  .brand img {
+    width: 42px; height: 42px; border-radius: 12px;
+    object-fit: cover; background: #fff; padding: 3px;
+    box-shadow:0 2px 6px rgba(0,0,0,0.1)
+  }
   .brand-text .subtitle {
-  font-size: 10px;
-  opacity: 0.9;
-  line-height: 1;
-  letter-spacing:0.5px
-}
-
-.brand-text .title {
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 1.2;
-}
-  .greeting{font-size:13px;opacity:.9}
-  .greeting b{font-size:18px}
+    font-size: 10px; opacity: 0.9; line-height: 1; letter-spacing:0.5px
+  }
+  .brand-text .title {
+    font-size: 16px; font-weight: 700; line-height: 1.2;
+  }
+  .greeting{text-align:right}
+  .greeting .hello{font-size:11px;opacity:.9}
+  .greeting b{font-size:15px}
 
   /* SALDO CARD */
   .saldo-card{
-    background:#fff;
-    margin:-40px 16px 16px;
-    border-radius:18px;
-    padding:16px;
-    box-shadow:0 8px 24px rgba(0,0,0,.08);
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
+    background:#fff; margin:-40px 16px 16px; border-radius:18px;
+    padding:16px; box-shadow:0 8px 24px rgba(0,0,0,.08);
+    display:flex; justify-content:space-between; align-items:center;
   }
   .saldo-left{display:flex;gap:10px;align-items:center}
   .saldo-icon{background:#e0f2fe;color:#0284c7;padding:10px;border-radius:12px;font-size:20px}
@@ -87,43 +62,31 @@
   /* MENU GRID 2x4 */
   .section-title{font-size:15px;font-weight:700;margin:0 16px 12px}
   .menu-grid{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:12px;
-    padding:0 16px;
-    margin-bottom:20px;
+    display:grid; grid-template-columns:repeat(4,1fr); gap:12px;
+    padding:0 16px; margin-bottom:20px;
   }
   .menu-item{
-    background:#fff;
-    border-radius:16px;
-    padding:14px 8px;
-    text-align:center;
-    box-shadow:0 4px 12px rgba(0,0,0,.05);
-    text-decoration:none;
-    color:var(--text);
+    background:#fff; border-radius:16px; padding:14px 8px;
+    text-align:center; box-shadow:0 4px 12px rgba(0,0,0,.05);
+    text-decoration:none; color:var(--text);
   }
   .menu-icon{
-    width:46px;height:46px;margin:0 auto 8px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff
+    width:46px;height:46px;margin:0 auto 8px;border-radius:14px;
+    display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff
   }
   .menu-name{font-size:11px;font-weight:600;line-height:1.3}
 
   /* PROMO BANNER */
   .promo{
-    margin:0 16px 16px;
-    background:linear-gradient(90deg,#fbbf24,#f59e0b);
-    border-radius:16px;
-    padding:14px;
-    color:#fff;
+    margin:0 16px 16px; background:linear-gradient(90deg,#fbbf24,#f59e0b);
+    border-radius:16px; padding:14px; color:#fff;
     display:flex;justify-content:space-between;align-items:center
   }
   .promo b{font-size:14px}
 
   /* RIWAYAT */
   .riwayat-card{
-    background:#fff;
-    margin:0 16px;
-    border-radius:16px;
-    padding:14px;
+    background:#fff; margin:0 16px; border-radius:16px; padding:14px;
     box-shadow:0 4px 12px rgba(0,0,0,.05);
   }
   .riwayat-header{display:flex;justify-content:space-between;margin-bottom:10px}
@@ -133,35 +96,34 @@
   /* BOTTOM NAV GOJEK */
   .bottom-nav{
     position:fixed;left:50%;transform:translateX(-50%);bottom:10px;
-    width:min(760px, calc(100% - 20px));
-    background:#fff;border:1px solid #e5e7eb;border-radius:20px;padding:8px;
-    display:grid;grid-template-columns:repeat(4,1fr);gap:8px;z-index:999;
+    width:min(760px, calc(100% - 20px)); background:#fff;border:1px solid #e5e7eb;
+    border-radius:20px;padding:8px; display:grid;grid-template-columns:repeat(4,1fr);gap:8px;z-index:999;
     box-shadow:0 10px 28px rgba(15,23,42,.12);
   }
   .nav-item{text-decoration:none;color:#64748b;font-weight:700;font-size:11px;display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px;border-radius:14px}
   .nav-item.active{background:#e0f2fe;color:#0284c7}
 
-  @media(max-width:420px){
-    .menu-grid{grid-template-columns:repeat(4,1fr)}
-  }
+  @media(max-width:420px){ .menu-grid{grid-template-columns:repeat(4,1fr)} }
   </style>
 </head>
 <body>
 
   <!-- HEADER -->
   <div class="header-gojek">
-    
     <div class="header-top">
       <div class="brand">
-        <img src="img/icon-192.png"alt="DASHBOARD">    
-          <div class="brand-text">
-                  <div class="title">ARFA</div>
-          </div>
-       </div>
-      <div class="greeting">Halo, <br><b id="namaUser">Admin</b></div>
+        <img src="img/icon-192.png" alt="DASHBOARD">
+        <div class="brand-text">
+          <div class="subtitle">DASHBOARD</div> <!-- 🔥 TAMBAH INI -->
+          <div class="title">ARFA</div>
+        </div>
+      </div>
+      <div class="greeting">
+        <div class="hello">Halo,</div>
+        <b id="namaUser">Admin</b> <!-- 🔥 INI NAMA USER/ROLE -->
+      </div>
     </div>
   </div>
-</div>
 
   <!-- SALDO CARD -->
   <div class="saldo-card">
@@ -178,46 +140,19 @@
   <!-- MENU GOJEK -->
   <div class="section-title">Menu Utama</div>
   <div class="menu-grid">
-    <a href="input.html" class="menu-item">
-      <div class="menu-icon" style="background:#1e90ff">📝</div>
-      <div class="menu-name">Input<br>Perjalanan</div>
-    </a>
-    <a href="driver.html" class="menu-item">
-      <div class="menu-icon" style="background:#00aa5b">🧑‍✈️</div>
-      <div class="menu-name">Data<br>Driver</div>
-    </a>
-    <a href="cari.html" class="menu-item">
-      <div class="menu-icon" style="background:#f59e0b">🔍</div>
-      <div class="menu-name">Cari<br>Data</div>
-    </a>
-    <a href="lapor.html" class="menu-item">
-      <div class="menu-icon" style="background:#7c3aed">📊</div>
-      <div class="menu-name">Laporan</div>
-    </a>
-    <a href="bbm.html" class="menu-item">
-      <div class="menu-icon" style="background:#e63946">⛽</div>
-      <div class="menu-name">BBM</div>
-    </a>
-    <a href="backup.html" class="menu-item">
-      <div class="menu-icon" style="background:#06b6d4">💾</div>
-      <div class="menu-name">Backup</div>
-    </a>
-    <a href="config.html" class="menu-item">
-      <div class="menu-icon" style="background:#64748b">⚙️</div>
-      <div class="menu-name">Setting</div>
-    </a>
-    <a href="user.html" class="menu-item">
-      <div class="menu-icon" style="background:#a855f7">👤</div>
-      <div class="menu-name">User</div>
-    </a>
+    <a href="input.html" class="menu-item"><div class="menu-icon" style="background:#1e90ff">📝</div><div class="menu-name">Input<br>Perjalanan</div></a>
+    <a href="driver.html" class="menu-item"><div class="menu-icon" style="background:#00aa5b">🧑‍✈️</div><div class="menu-name">Data<br>Driver</div></a>
+    <a href="cari.html" class="menu-item"><div class="menu-icon" style="background:#f59e0b">🔍</div><div class="menu-name">Cari<br>Data</div></a>
+    <a href="lapor.html" class="menu-item"><div class="menu-icon" style="background:#7c3aed">📊</div><div class="menu-name">Laporan</div></a>
+    <a href="bbm.html" class="menu-item"><div class="menu-icon" style="background:#e63946">⛽</div><div class="menu-name">BBM</div></a>
+    <a href="backup.html" class="menu-item"><div class="menu-icon" style="background:#06b6d4">💾</div><div class="menu-name">Backup</div></a>
+    <a href="config.html" class="menu-item"><div class="menu-icon" style="background:#64748b">⚙️</div><div class="menu-name">Setting</div></a>
+    <a href="user.html" class="menu-item"><div class="menu-icon" style="background:#a855f7">👤</div><div class="menu-name">User</div></a>
   </div>
 
   <!-- PROMO -->
   <div class="promo">
-    <div>
-      <b>Tips Hemat BBM</b><br>
-      <span style="font-size:11px">Catat BBM tiap hari biar untung</span>
-    </div>
+    <div><b>Tips Hemat BBM</b><br><span style="font-size:11px">Catat BBM tiap hari biar untung</span></div>
     <div>⛽</div>
   </div>
 
@@ -227,9 +162,7 @@
       <b>Aktivitas Terbaru</b>
       <a href="lapor.html" style="font-size:11px;color:var(--gojek);text-decoration:none">Lihat Semua</a>
     </div>
-    <div id="riwayatList">
-      <div style="text-align:center;color:var(--muted);font-size:12px">Loading...</div>
-    </div>
+    <div id="riwayatList"><div style="text-align:center;color:var(--muted);font-size:12px">Loading...</div></div>
   </div>
 
   <!-- BOTTOM NAV -->
@@ -254,7 +187,9 @@ const db = getFirestore(app);
 
 const username = localStorage.getItem("username") || "Admin";
 const role = localStorage.getItem("role") || "admin";
-document.getElementById("namaUser").innerText = username;
+
+// 🔥 FIX: TAMPILIN NAMA + ROLE
+document.getElementById("namaUser").innerText = `${username} (${role.toUpperCase()})`;
 
 const rupiah = n => "Rp " + Number(n || 0).toLocaleString("id-ID");
 
@@ -281,7 +216,6 @@ async function loadRiwayat(){
   let html = "";
   snap.forEach(d=>{
     const data = d.data();
-    const tgl = data.createdAt?.toDate ? data.createdAt.toDate() : new Date(data.createdAt);
     html += `
       <div class="riwayat-item">
         <div>${data.namaSiswa || '-'} - ${data.namaDriver || '-'}</div>
