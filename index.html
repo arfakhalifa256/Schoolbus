@@ -277,6 +277,44 @@ function updateWaktu() {
 
 updateWaktu();
 setInterval(updateWaktu, 1000);
+  
+// 🔥 JAGA2: Kalau udah logout tapi pencet back
+history.pushState(null, null, location.href);
+window.onpopstate = function () {
+    history.go(1);
+};
+
+// Kalau udah login, langsung lempar ke input
+if(localStorage.getItem("login") === "true") {
+  const role = localStorage.getItem("role");
+  if(role === "driver") {
+    window.location.replace("input.html");
+  } else {
+    window.location.replace("dashboard.html");
+  }
+}
+
+// 🔥 JAM + SALAM REALTIME
+function updateWaktu() {
+  const now = new Date();
+  const jam = now.getHours();
+  const menit = String(now.getMinutes()).padStart(2, '0');
+  const detik = String(now.getSeconds()).padStart(2, '0');
+  
+  const username = localStorage.getItem("username");
+  document.getElementById("jam").textContent = `${jam}:${menit}:${detik}`;
+  
+  let salam = "Selamat datang";
+  if(jam < 11) salam = "Selamat pagi";
+  else if(jam < 15) salam = "Selamat siang";
+  else if(jam < 18) salam = "Selamat sore";
+  else salam = "Selamat malam";
+  
+  document.getElementById("salam").textContent = username ? `${salam}, ${username}` : salam;
+}
+updateWaktu();
+setInterval(updateWaktu, 1000);
+  
   </script>
 </body>
 </html>

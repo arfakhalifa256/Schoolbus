@@ -233,7 +233,15 @@ if(role !== "admin"){
 
 window.logout = function(){
   localStorage.clear();
-  window.location.href = "login.html";
+  
+  // 🔥 KUNCI: Hapus history dan paksa ke login
+  window.location.replace("login.html"); 
+  
+  // 🔥 JAGA2: Cegah back
+  history.pushState(null, null, location.href);
+  window.onpopstate = function () {
+      history.go(1);
+  };
 }
 
 loadSaldo();

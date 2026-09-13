@@ -167,6 +167,11 @@ header {
   align-items:center;
   gap:10px;
 }
+  .btn-back {
+  background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25);
+  color: #fff; width: 38px; height: 38px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center; cursor:pointer
+}
 
 .user-info{
   text-align:right;
@@ -554,8 +559,17 @@ window.simpanData = simpanData;
 window.hitungTotal = hitungTotal;
 window.updateHarga = updateHarga;
 window.ubahTrayek = ubahTrayek;
-window.kembali=function(){
-  window.location.href="dashboard.html"; // 🔥 ini filenya
+window.logout = function(){
+  localStorage.clear();
+  
+  // 🔥 KUNCI: Hapus history dan paksa ke login
+  window.location.replace("login.html"); 
+  
+  // 🔥 JAGA2: Cegah back
+  history.pushState(null, null, location.href);
+  window.onpopstate = function () {
+      history.go(1);
+  };
 }
   </script>
 </body>

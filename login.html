@@ -226,6 +226,23 @@ window.resetPassword = async function(){
   alert("✅ Password berhasil direset");
   closeLupa();
 }
+  
+// 🔥 KUNCI: Kalau udah login, lempar sesuai role
+if(localStorage.getItem("login") === "true"){
+  const role = localStorage.getItem("role");
+  if(role === "driver"){
+    window.location.replace("input.html"); // replace biar ga ada history
+  } else {
+    window.location.replace("dashboard.html");
+  }
+}
+
+// 🔥 CEGAH KEMBALI KE HALAMAN SEBELUMNYA SETELAH LOGIN
+history.pushState(null, null, location.href);
+window.onpopstate = function () {
+    history.go(1);
+};
+
 </script>
 </body>
 </html>
