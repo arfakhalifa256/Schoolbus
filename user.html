@@ -5,579 +5,254 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Manajemen User</title>
 
-<link rel="stylesheet" href="css/sidebar.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
-  /* 🔥 FIX ANTI LUBER DI APK */
-html, body {
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden; /* kunci geser ke samping */
+:root{
+  --primary:#1e90ff; --primary-dark:#0f6ecf; --danger:#ef4444;
+  --success:#16a34a; --warning:#f59e0b; --bg:#f4f7fb;
+  --card:#ffffff; --text:#1f2937; --muted:#6b7280;
+  --border:#e5e7eb; --shadow:0 4px 12px rgba(15,23,42,.06); --radius:14px
 }
 
-* {
-  box-sizing: border-box; /* biar padding ga nambahin lebar */
-}
+html, body {width: 100%;max-width: 100%;overflow-x: hidden;font-family:'Poppins',Arial,sans-serif;background:var(--bg);color:var(--text);margin:0;}
+*{box-sizing: border-box;}
 
-.card, .table-wrapper {
-  width: 100%;
-  max-width: 100%;
+/* ===== HEADER ===== */
+header {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: #fff; padding: 14px 16px; display: flex;
+  justify-content: space-between; align-items: center;
+  box-shadow: 0 4px 16px rgba(30,144,255,0.25); position: sticky; top: 0; z-index: 100;
 }
+.brand {display: flex; align-items: center; gap: 12px;}
+.brand img {width: 42px; height: 42px; border-radius: 14px; background: #fff; padding: 4px;}
+.brand-text.subtitle {font-size: 10px; opacity: 0.85; letter-spacing:0.8px;}
+.brand-text.title {font-size: 18px; font-weight: 700;}
+.header-right{display:flex; align-items:center; gap:12px;}
+.user-info{text-align:right; display:none;}
+.user-name{font-size:13px; font-weight:700;}
+.user-role{font-size:10px; background:rgba(255,255,255,0.25); padding:3px 8px; border-radius:20px; font-weight:600;}
+.btn-back {background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); color: #fff; width: 38px; height: 38px; border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor:pointer}
+@media(min-width:480px){.user-info{display:block}}
 
-.table-wrapper {
-  overflow-x: auto; /* tabel boleh scroll ke samping, tapi halamannya jangan */
-  -webkit-overflow-scrolling: touch; /* biar smooth di HP */
-}
-
-table {
-  min-width: 100%; /* 🔥 JANGAN 700px. Biar ngikutin layar */
-  width: max-content; /* tapi kalau isinya banyak tetap bisa scroll */
-}
-  @media(max-width:768px){
-  body{margin-left:0; padding:10px} /* 🔥 padding dikecilin biar ga luber */
-  .sidebar{left:-240px;transition:.3s}
-  .sidebar.show{left:0}
-  .menu-toggle{display:block;position:fixed;top:10px;left:10px;background:#1e90ff;color:#fff;border:none;padding:8px 10px;border-radius:8px;z-index:1100}
-  
-  th, td{font-size:11px;padding:6px;white-space:nowrap}
-  h2{font-size:16px}
-  .card{padding:10px}
-  
-  /* 🔥 TAMBAHAN BUAT APK */
-  .filter-container{flex-direction:column} /* filter numpuk ke bawah */
-  .btn{width:100%; margin-bottom:8px} /* tombol full */
-}
-  
-body{
-  font-family:Arial;
-  margin:0;
-  background:#f4f6f9;
-}
-
-/* ===== CONTENT ===== */
-.main{
-  padding:20px;
-  max-width:700px;
-  margin:0 auto;
-  padding-top:70px;
-}
-
-header{
-  background:#1e90ff;
-  color:#fff;
-  padding:15px;
-  text-align:center;
-  border-radius:12px;
-  margin-bottom:15px;
-}
-
-input, select{
-  width:100%;
-  margin-bottom:10px;
-  height:42px;
-  padding:8px;
-  border:1px solid #ddd;
-  border-radius:10px;
-}
-
-button{
-  height:42px;
-  border:none;
-  background:#1e90ff;
-  color:#fff;
-  cursor:pointer;
-  width:100%;
-  border-radius:10px;
-}
+.content{padding:16px; max-width:760px; margin:0 auto; padding-bottom:100px}
+h2{text-align:center;color:var(--primary);margin:16px 0;font-size:18px; font-weight:700}
 
 .card{
-  background:#fff;
-  padding:12px;
-  border-radius:12px;
-  margin-bottom:10px;
-  box-shadow:0 3px 10px rgba(0,0,0,0.1);
+  background:var(--card); border-radius:var(--radius);
+  padding:18px; margin-bottom:16px;
+  box-shadow:var(--shadow); border:1px solid var(--border);
 }
 
-.row{
-  display:flex;
-  justify-content:space-between;
-  margin-bottom:6px;
+label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;margin-top:12px;color:#374151}
+input,select{
+  width:100%;border:1.5px solid var(--border); border-radius:12px;
+  padding:12px 14px; font-size:14px; outline:none; background:#fff;
+  font-family:'Poppins',sans-serif; transition:.2s; margin-bottom:10px
 }
+input:focus,select:focus{border-color:var(--primary); box-shadow:0 0 0 4px rgba(30,144,255,.12)}
 
 .btn{
-  padding:6px 10px;
-  border:none;
-  cursor:pointer;
-  border-radius:8px;
+  width:100%;border:none;border-radius:12px; padding:13px 14px;
+  font-size:14px; font-weight:700;color:#fff;cursor:pointer;
+  margin-top:14px; transition:.2s; background:var(--primary)
 }
+.btn:hover{transform:translateY(-1px); background:var(--primary-dark)}
+.btn-cancel{background:#9ca3af}
 
-.edit{background:orange;color:#fff;}
-.hapus{background:red;color:#fff;}
+.row{display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; gap:8px;}
+.small{font-size:12px; color:var(--muted);}
+.icon-btn{width:34px; height:34px; border:none; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:15px; cursor:pointer; color:#fff; transition:.2s}
+.icon-btn.edit{background:var(--warning);}
+.icon-btn.hapus{background:var(--danger);}
 
-.small{
-  font-size:12px;
-  color:#666;
-}
-  *{
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: Arial;
-}
+/* ===== POPUP ===== */
+.popup{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;padding:16px;z-index:9998}
+.popup-box{width:100%;max-width:420px;background:#fff;border-radius:20px;padding:20px;box-shadow:0 20px 60px rgba(0,0,0,.25); animation:pop.2s}
+@keyframes pop{from{transform:scale(0.9); opacity:0}}
+.popup-title{font-size:18px;font-weight:700;margin-bottom:12px;color:#111827}
 
-body{
-  background:#f4f7fb;
-}
-
-/* ===== SIDEBAR ===== */
-.sidebar{
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 240px;
-  height: 100%;
-  background: #111827;
-  color: #fff;
-  padding: 16px;
-  transform: translateX(-100%);
-  transition: 0.3s ease;
-  z-index: 999;
-  overflow-y: auto;
-}
-
-.sidebar.show{
-  transform: translateX(0);
-}
-
-.sidebar h2{
-  margin-bottom: 15px;
-}
-
-.sidebar a{
-  display: block;
-  color: #fff;
-  text-decoration: none;
-  padding: 10px;
-  border-radius: 8px;
-  margin-bottom: 6px;
-}
-
-.sidebar a:hover{
-  background: #1e90ff;
-}
-
-.sidebar a.active{
-  background: #1e90ff;
-}
-
-/* ===== BUTTON ===== */
-.toggle-btn{
-  position: fixed;
-  top: 12px;
-  left: 12px;
-  z-index: 1000;
-  background: #1e90ff;
-  color: white;
-  border: none;
-  padding: 10px 12px;
-  border-radius: 10px;
-  font-size: 18px;
-}
-
-/* ===== CONTENT ===== */
-.main{
-  padding: 20px;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.title{
-  margin-top: 50px;
-  margin-bottom: 20px;
-  text-align: center;
-  font-size: 20px;
-}
-
-/* ===== CARD ===== */
-.card{
-  background:#fff;
-  padding:16px;
-  border-radius:16px;
-  box-shadow:0 8px 20px rgba(0,0,0,0.08);
-}
-
-.card label{
-  display:block;
-  margin-top:10px;
-  font-size:14px;
-}
-
-.card input{
-  width:100%;
-  padding:10px;
-  margin-top:5px;
-  border:1px solid #ddd;
-  border-radius:10px;
-}
-
-.card button{
-  margin-top:15px;
-  width:100%;
-  padding:12px;
-  border:none;
-  background:#1e90ff;
-  color:#fff;
-  border-radius:10px;
-  font-size:16px;
-}
-
-/* ===== HASIL ===== */
-.hasil{
-  margin-top:15px;
-  background:#fff;
-  padding:15px;
-  border-radius:12px;
-}
-  .toggle-btn{
-  position: fixed;
-  top: 10px;
-  left: 10px;
-  z-index: 1000;
-  background: #1e90ff;
-  color: white;
-  border: none;
-  width: 38px;
-  height: 38px;
-  border-radius: 10px;
-  font-size: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-}
-
-/* efek klik */
-.toggle-btn:active{
-  transform: scale(0.95);
-}
-  .btn{
-  padding:4px 8px;
-  font-size:12px;
-  border:none;
-  cursor:pointer;
-  border-radius:6px;
-  line-height:1;
-}
-
-/* tombol edit */
-.edit{
-  background:orange;
-  color:#fff;
-}
-
-/* tombol hapus */
-.hapus{
-  background:red;
-  color:#fff;
-}
-
-/* biar tombol tidak terlalu besar saat di row */
-.row .btn{
-  min-width:8px;
-}
-  .icon-btn{
-  width:32px;
-  height:32px;
-  border:none;
-  border-radius:8px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:14px;
-  cursor:pointer;
-  color:#fff;
-}
-
-/* edit */
-.icon-btn.edit{
-  background:orange;
-}
-
-/* hapus */
-.icon-btn.hapus{
-  background:red;
-}
-
-/* hover efek */
-.icon-btn:active{
-  transform:scale(0.92);
-}
-
-/* row tombol biar rapat */
-.row{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:px;
-}
+.toast{position:fixed;left:50%;bottom:24px; transform:translateX(-50%); background:#111827;color:#fff; padding:12px 18px;border-radius:10px; opacity:0;pointer-events:none; transition:.25s;z-index:9999; font-weight:600}
+.toast.show{opacity:1}
 </style>
 </head>
-
 <body>
+<header>
+  <div class="brand">
+    <img src="img/icon-192.png">
+    <div class="brand-text">
+      <div class="subtitle">SCHOOL BUS</div>
+      <div class="title">ARFA</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="user-info">
+      <div class="user-name" id="namaHeader">Admin</div>
+      <div class="user-role" id="roleHeader">ADMIN</div>
+    </div>
+    <button class="btn-back" onclick="kembali()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    </button>
+  </div>
+</header>
 
-<!-- ===== TOGGLE BUTTON ===== -->
-<button class="toggle-btn" onclick="toggleSidebar()">☰</button>
-
-<!-- ===== SIDEBAR ===== -->
-<div class="sidebar" id="sidebar">
-  <h2>School Bus</h2>
-
-  <a href="dashboard.html">🏠 Dashboard</a>
-  <a href="input.html">📝 Input Perjalanan </a>
-  <a href="driver.html">🧑‍✈️ Driver</a>
-  <a href="cari.html">✏️ Edit</a>
-  <a href="lapor.html">📊 Laporan</a>
-  <a href="backup.html">💾 Backup</a>
-  <a href="config.html">⚙️ Config</a>
-  <a href="bbm.html">⛽ BBM</a>
-  <a href="user.html" class="active">👤 User</a>
-
-  <hr>
-  <a href="#" onclick="logout()">🚪 Logout</a>
-</div>
-
-<!-- ===== MAIN ===== -->
-<div class="main">
-
-  <header>
-    <h2>Manajemen User</h2>
-  </header>
-
-  <input type="text" id="username" placeholder="Username">
-  <input type="text" id="password" placeholder="Password">
-
-  <select id="role" onchange="toggleDriver()">
-    <option value="admin">Admin</option>
-    <option value="driver">Driver</option>
-  </select>
-
-  <select id="driverId" style="display:none">
-    <option value="">-- Pilih Driver --</option>
-  </select>
-
-  <button onclick="simpanUser()">Simpan User</button>
-
-  <hr>
-
+<div class="content">
+  <h2>👤 Manajemen User</h2>
+  <div class="card">
+    <label>Username</label>
+    <input type="text" id="username" placeholder="Username" readonly>
+    <label>Password Baru</label>
+    <input type="text" id="password" placeholder="Kosongkan jika tidak ganti">
+    <button class="btn" onclick="simpanUser()">💾 Tambah User Baru</button>
+  </div>
   <div id="listUser"></div>
-
 </div>
 
-<!-- ===== SCRIPT ===== -->
+<!-- ===== POPUP EDIT ===== -->
+<div id="popupEdit" class="popup">
+  <div class="popup-box">
+    <div class="popup-title">✏️ Edit User</div>
+    <label>Username</label>
+    <input type="text" id="editUsername" readonly>
+    <label>Password Baru</label>
+    <input type="text" id="editPassword" placeholder="Kosongkan jika tidak ganti">
+    <label>Role</label>
+    <select id="editRole" onchange="toggleDriverEdit()">
+      <option value="admin">Admin</option>
+      <option value="driver">Driver</option>
+    </select>
+    <label id="labelDriverEdit" style="display:none">Pilih Driver</label>
+    <select id="editDriverId" style="display:none">
+      <option value="">-- Pilih Driver --</option>
+    </select>
+    <button class="btn" onclick="updateUser()">Update</button>
+    <button class="btn btn-cancel" onclick="closePopup()">Batal</button>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  deleteDoc,
-  doc,
-  updateDoc,
-  getDoc,
-  onSnapshot
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, collection, deleteDoc, doc, updateDoc, getDoc, onSnapshot, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSy...",
-  authDomain: "schoolbus-6a7fd.firebaseapp.com",
-  projectId: "schoolbus-6a7fd",
-};
-
+const firebaseConfig = {apiKey: "AIzaSy...", authDomain: "schoolbus-6a7fd.firebaseapp.com", projectId: "schoolbus-6a7fd"};
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// ================= AUTH =================
-const role = (localStorage.getItem("role") || "").toLowerCase();
-const login = localStorage.getItem("login");
+const roleLogin = (localStorage.getItem("role") || "").toLowerCase();
+const userLogin = localStorage.getItem("username") || "Admin";
+document.getElementById("namaHeader").innerText = userLogin;
+document.getElementById("roleHeader").innerText = roleLogin.toUpperCase();
 
-if (login !== "true") {
-  window.location.href = "index.html";
-}
+if (localStorage.getItem("login")!== "true") window.location.href = "index.html";
+if (roleLogin!== "admin") {alert("Akses ditolak!"); window.location.href = "dashboard.html";}
 
-if (role !== "admin") {
-  alert("Akses ditolak!");
-  window.location.href = "dashboard.html";
-}
+let editId = null; let driverMap = {};
 
-// ================= STATE =================
-let editId = null;
-let driverMap = {};
-let unsubscribeUser = null;
-let unsubscribeDriver = null;
+function showToast(msg){const t = document.getElementById("toast"); t.innerText = msg; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"), 2500);}
 
-// ================= SIDEBAR =================
-window.toggleSidebar = function () {
-  document.getElementById("sidebar").classList.toggle("show");
-};
-
-window.logout = function () {
-  localStorage.clear();
-  window.location.href = "index.html";
-};
-
-// ================= DRIVER REALTIME =================
 function loadDriverRealtime() {
-  const select = document.getElementById("driverId");
-
-  if (unsubscribeDriver) unsubscribeDriver();
-
-  unsubscribeDriver = onSnapshot(collection(db, "drivers"), (snapshot) => {
+  const select = document.getElementById("editDriverId");
+  onSnapshot(collection(db, "drivers"), (snapshot) => {
     select.innerHTML = '<option value="">-- Pilih Driver --</option>';
     driverMap = {};
-
     snapshot.forEach((docSnap) => {
-      const d = docSnap.data();
-      const nama = d.nama || "-";
-
+      const d = docSnap.data(); const nama = d.nama || d.namaDriver || "-";
       driverMap[docSnap.id] = nama;
-
-      const opt = document.createElement("option");
-      opt.value = docSnap.id;
-      opt.textContent = nama;
+      const opt = document.createElement("option"); opt.value = docSnap.id; opt.textContent = nama;
       select.appendChild(opt);
     });
   });
 }
 
-// ================= TOGGLE DRIVER =================
-window.toggleDriver = function () {
-  const roleInput = document.getElementById("role").value;
-  document.getElementById("driverId").style.display =
-    roleInput === "driver" ? "block" : "none";
-};
+window.toggleDriverEdit = function () {
+  const roleInput = document.getElementById("editRole").value;
+  const show = roleInput === "driver";
+  document.getElementById("editDriverId").style.display = show? "block" : "none";
+  document.getElementById("labelDriverEdit").style.display = show? "block" : "none";
+}
 
-// ================= USER REALTIME =================
 function loadUserRealtime() {
   const list = document.getElementById("listUser");
-
-  if (unsubscribeUser) unsubscribeUser();
-
-  unsubscribeUser = onSnapshot(collection(db, "users"), (snapshot) => {
+  onSnapshot(collection(db, "users"), (snapshot) => {
     list.innerHTML = "";
-
     snapshot.forEach((docSnap) => {
-    const u = docSnap.data();
-
-    if (u.role === "admin" && u.username !== "admin") {
-        return;
-    }
-
-    const card = document.createElement("div");
+      const u = docSnap.data();
+      if (u.role === "admin" && u.username!== "admin") return;
+      const card = document.createElement("div");
       card.className = "card";
-
       card.innerHTML = `
-        <div class="row">
-          <b>${u.username}</b>
-          <span>${u.role}</span>
+        <div class="row"><b>${u.username}</b>
+          <span class="small" style="background:#eff6ff; color:#1e40af; padding:3px 8px; border-radius:20px;">${u.role}</span>
         </div>
-
-        <div class="row small">
-          Driver: ${u.driverName || driverMap[u.driverId] || "-"}
-        </div>
-
+        <div class="row small">Driver: ${u.namaDriver || driverMap[u.driverId] || "-"}</div>
         <div class="row">
-          <button class="icon-btn edit"
-            onclick="editUser('${docSnap.id}')">✏️</button>
-
-          <button class="icon-btn hapus"
-            onclick="hapusUser('${docSnap.id}')">🗑️</button>
+          <button class="icon-btn edit" onclick='editUser(${JSON.stringify(u)})'>✏️</button>
+          <button class="icon-btn hapus" onclick="hapusUser('${docSnap.id}')">🗑️</button>
         </div>
       `;
-
       list.appendChild(card);
     });
   });
 }
 
-// ================= SIMPAN USER =================
 async function simpanUser() {
   const username = document.getElementById("username").value.trim().toLowerCase();
   const password = document.getElementById("password").value.trim();
-  const roleInput = document.getElementById("role").value;
-  const driverId = document.getElementById("driverId").value;
+  if (!username ||!password) { showToast("Username & password wajib"); return; }
+  try {
+    await setDoc(doc(db, "users", username), {
+      username, password, role: "driver", // default driver
+      driverId: "", namaDriver: "", createdAt: Date.now()
+    });
+    showToast("✅ User berhasil ditambah");
+    document.getElementById("username").value = "";
+    document.getElementById("password").value = "";
+  } catch (err) { alert("Gagal: " + err.message); }
+}
+window.simpanUser = simpanUser;
+
+window.editUser = function (u) {
+  editId = u.username;
+  document.getElementById("editUsername").value = u.username;
+  document.getElementById("editPassword").value = "";
+  document.getElementById("editRole").value = u.role;
+  document.getElementById("editDriverId").value = u.driverId || "";
+  toggleDriverEdit();
+  document.getElementById("popupEdit").style.display = "flex";
+}
+
+window.updateUser = async function () {
+  const password = document.getElementById("editPassword").value.trim();
+  const roleInput = document.getElementById("editRole").value;
+  const driverId = document.getElementById("editDriverId").value;
   const namaDriver = driverMap[driverId] || "";
 
-  if (!username ||!password) { alert("Username & password wajib"); return; }
-
-  const payload = {
-    username, password, role: roleInput,
-    driverId: roleInput === "driver"? driverId : "",
-    namaDriver: roleInput === "driver"? namaDriver : "", // 🔥 PENTING
-    updatedAt: new Date()
-  };
+  const payload = { role: roleInput, updatedAt: Date.now() };
+  if(password) payload.password = password; // cuma update kalau diisi
+  payload.driverId = roleInput === "driver"? driverId : "";
+  payload.namaDriver = roleInput === "driver"? namaDriver : "";
 
   try {
-    await setDoc(doc(db, "users", username), payload); // 🔥 ID = username
-
-    // 🔥 KALAU ROLE DRIVER, AUTO BIKIN DI DRIVERS JUGA
-    if (roleInput === "driver" && driverId) {
-      await setDoc(doc(db, "drivers", driverId), {
-        driverId,
-        nama: namaDriver,
-        namaDriver: namaDriver, // 🔥 SAMA
-        username,
-        user: localStorage.getItem("username"),
-        createdAt: Date.now()
-      });
-    }
-    resetForm();
+    await updateDoc(doc(db, "users", editId), payload);
+    showToast("✅ User berhasil diupdate");
+    closePopup();
   } catch (err) { alert("Gagal: " + err.message); }
 }
 
-window.simpanUser = simpanUser;
-
-// ================= EDIT =================
-window.editUser = async function (id) {
-  const snap = await getDoc(doc(db, "users", id));
-  const u = snap.data();
-
-  document.getElementById("username").value = u.username;
-  document.getElementById("password").value = u.password;
-  document.getElementById("role").value = u.role;
-  document.getElementById("driverId").value = u.driverId || "";
-
-  toggleDriver();
-  editId = id;
-};
-
-// ================= HAPUS =================
 window.hapusUser = async function (id) {
   if (!confirm("Hapus user ini?")) return;
-
-  try {
-    await deleteDoc(doc(db, "users", id));
-  } catch (err) {
-    alert("Gagal hapus: " + err.message);
-  }
-};
-
-// ================= RESET =================
-function resetForm() {
-  editId = null;
-  document.getElementById("username").value = "";
-  document.getElementById("password").value = "";
-  document.getElementById("role").value = "admin";
-  document.getElementById("driverId").value = "";
-  toggleDriver();
+  try { await deleteDoc(doc(db, "users", id)); showToast("✅ User dihapus"); }
+  catch (err) { alert("Gagal hapus: " + err.message); }
 }
 
-// ================= INIT =================
+window.closePopup = function(){document.getElementById("popupEdit").style.display = "none"; editId = null;}
+window.kembali=function(){window.location.href="dashboard.html";}
+
 loadDriverRealtime();
-toggleDriver();
 loadUserRealtime();
 </script>
-</script>
-
 </body>
 </html>

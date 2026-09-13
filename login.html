@@ -4,292 +4,228 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Login System</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
-  /* 🔥 FIX ANTI LUBER DI APK */
-html, body {
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden; /* kunci geser ke samping */
-}
-
-* {
-  box-sizing: border-box; /* biar padding ga nambahin lebar */
-}
-
-.card, .table-wrapper {
-  width: 100%;
-  max-width: 100%;
-}
-
-.table-wrapper {
-  overflow-x: auto; /* tabel boleh scroll ke samping, tapi halamannya jangan */
-  -webkit-overflow-scrolling: touch; /* biar smooth di HP */
-}
-
-table {
-  min-width: 100%; /* 🔥 JANGAN 700px. Biar ngikutin layar */
-  width: max-content; /* tapi kalau isinya banyak tetap bisa scroll */
-}
-  @media(max-width:768px){
-  body{margin-left:0; padding:10px} /* 🔥 padding dikecilin biar ga luber */
-  .sidebar{left:-240px;transition:.3s}
-  .sidebar.show{left:0}
-  .menu-toggle{display:block;position:fixed;top:10px;left:10px;background:#1e90ff;color:#fff;border:none;padding:8px 10px;border-radius:8px;z-index:1100}
-  
-  th, td{font-size:11px;padding:6px;white-space:nowrap}
-  h2{font-size:16px}
-  .card{padding:10px}
-  
-  /* 🔥 TAMBAHAN BUAT APK */
-  .filter-container{flex-direction:column} /* filter numpuk ke bawah */
-  .btn{width:100%; margin-bottom:8px} /* tombol full */
-}
+*{box-sizing:border-box;margin:0;padding:0}
 body{
-  font-family:Arial;
-  background:#f4f6f9;
+  font-family:'Poppins',Arial;
+  background:linear-gradient(135deg,#1e90ff,#3b82f6);
   display:flex;
   justify-content:center;
   align-items:center;
   height:100vh;
+  padding:16px;
 }
 
 .box{
   background:#fff;
-  padding:20px;
-  border-radius:10px;
-  width:320px;
-  box-shadow:0 5px 15px rgba(0,0,0,0.1);
+  padding:24px;
+  border-radius:20px;
+  width:100%;
+  max-width:360px;
+  box-shadow:0 20px 40px rgba(0,0,0,0.15);
+  animation:fadeIn.3s ease;
 }
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+.logo{text-align:center;margin-bottom:16px}
+.logo img{width:70px;height:70px;border-radius:18px;background:#1e90ff;padding:8px}
+.logo h2{margin-top:8px;font-size:20px;color:#1e293b;font-weight:700}
+.logo p{font-size:12px;color:#64748b}
 
 input{
   width:100%;
-  height:40px;
-  margin-bottom:10px;
-  padding:8px;
-  box-sizing:border-box;
+  height:44px;
+  margin-bottom:12px;
+  padding:0 12px;
+  border:1.5px solid #e2e8f0;
+  border-radius:10px;
+  font-size:13px;
+  outline:none;
+  transition:.2s;
 }
+input:focus{border-color:#1e90ff}
 
-button{
+.btn{
   width:100%;
-  height:40px;
+  height:44px;
   background:#1e90ff;
   color:#fff;
   border:none;
+  border-radius:10px;
+  font-weight:600;
+  font-size:14px;
   cursor:pointer;
-  margin-bottom:5px;
+  margin-bottom:8px;
+  transition:.2s;
+}
+.btn:hover{background:#0f6ecf}
+.btn:disabled{background:gray}
+
+.btn-outline{
+  background:#fff;
+  color:#1e90ff;
+  border:1.5px solid #1e90ff;
 }
 
-button:disabled{
-  background:gray;
-}
-
-.small{
+.link-row{
+  display:flex;
+  justify-content:space-between;
   font-size:12px;
-  text-align:center;
+  margin-bottom:12px;
+}
+.link{
   color:#1e90ff;
   cursor:pointer;
+  font-weight:600;
 }
 
 #loading{
   display:none;
   text-align:center;
-  font-size:13px;
-  margin-top:10px;
+  font-size:12px;
+  color:#64748b;
+  margin:8px 0;
 }
+
+/* POPUP LUPA PASSWORD */
+.popup{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);display:none;justify-content:center;align-items:center;z-index:2000}
+.popup-content{background:#fff;padding:20px;border-radius:16px;width:90%;max-width:320px}
+.popup-content h3{margin-bottom:10px;font-size:16px}
 </style>
 </head>
 
 <body>
 
 <div class="box">
-
-  <h3 id="title">Login</h3>
+  <div class="logo">
+    <img src="./img/icon-512.png" alt="Logo">
+    <h2>School Bus</h2>
+    <p id="subtitle">Masuk untuk melanjutkan</p>
+  </div>
 
   <input type="text" id="username" placeholder="Username">
   <input type="password" id="password" placeholder="Password">
 
-  <button id="btnLogin" onclick="login()">Login</button>
-  <button id="btnRegister" onclick="register()" style="display:none;">Daftar</button>
-
-  <div id="loading">Loading...</div>
-
-  <div class="small" onclick="toggleMode()" id="toggleText">
-    Belum punya akun? Daftar
+  <div class="link-row">
+    <div class="link" onclick="toggleMode()" id="toggleText">Belum punya akun? Daftar</div>
+    <div class="link" onclick="showLupaPass()">Lupa Password?</div>
   </div>
+
+  <button class="btn" id="btnLogin" onclick="login()">Login</button>
+  <button class="btn btn-outline" id="btnRegister" onclick="register()" style="display:none;">Daftar</button>
+
+  <div id="loading">⏳ Loading...</div>
 
 </div>
 
+<!-- POPUP LUPA PASSWORD -->
+<div id="popupLupa" class="popup">
+  <div class="popup-content">
+    <h3>🔒 Reset Password</h3>
+    <input type="text" id="resetUser" placeholder="Masukkan Username">
+    <input type="password" id="resetPassBaru" placeholder="Password Baru">
+    <button class="btn" onclick="resetPassword()">Reset</button>
+    <button class="btn btn-outline" onclick="closeLupa()">Batal</button>
+  </div>
+</div>
+
 <script type="module">
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import {
-  getFirestore,
-  collection,
-  getDocs,
-  doc,
-  setDoc
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, collection, getDocs, doc, setDoc, updateDoc, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// ================= FIREBASE =================
 const firebaseConfig = {
   apiKey: "AIzaSyBxbArCZ6iIWQ8wS7QIonZOeN4t_r9o2WU",
   authDomain: "schoolbus-6a7fd.firebaseapp.com",
-  databaseURL: "https://schoolbus-6a7fd-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "schoolbus-6a7fd",
-  storageBucket: "schoolbus-6a7fd.firebasestorage.app",
-  messagingSenderId: "486602913199",
-  appId: "1:486602913199:web:9547f39f5f57f9c87b2b5a"
 };
-  
-
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 // ================= MODE =================
 let mode = "login";
-
 window.toggleMode = function(){
-
-  mode = mode === "login" ? "register" : "login";
-
-  document.getElementById("title").innerText =
-    mode === "login" ? "Login" : "Daftar";
-
-  document.getElementById("btnLogin").style.display =
-    mode === "login" ? "block" : "none";
-
-  document.getElementById("btnRegister").style.display =
-    mode === "register" ? "block" : "none";
-
-  document.getElementById("toggleText").innerText =
-    mode === "login"
-      ? "Belum punya akun? Daftar"
-      : "Sudah punya akun? Login";
+  mode = mode === "login"? "register" : "login";
+  document.getElementById("subtitle").innerText = mode === "login"? "Masuk untuk melanjutkan" : "Buat akun baru";
+  document.getElementById("btnLogin").style.display = mode === "login"? "block" : "none";
+  document.getElementById("btnRegister").style.display = mode === "register"? "block" : "none";
+  document.getElementById("toggleText").innerText = mode === "login"? "Belum punya akun? Daftar" : "Sudah punya akun? Login";
 };
 
 // ================= REGISTER =================
 window.register = async function(){
-
   const usernameEl = document.getElementById("username");
   const passwordEl = document.getElementById("password");
-
   const username = usernameEl.value.trim();
   const password = passwordEl.value.trim();
   const loading = document.getElementById("loading");
 
-  if(!username || !password){
-    alert("Isi semua field");
-    return;
-  }
-
+  if(!username ||!password){ alert("Isi semua field"); return; }
   loading.style.display = "block";
 
   const snapshot = await getDocs(collection(db,"users"));
-
   let exist = false;
+  snapshot.forEach(docSnap=>{ if(docSnap.data().username === username){ exist = true; } });
 
-  snapshot.forEach(docSnap=>{
-    if(docSnap.data().username === username){
-      exist = true;
-    }
-  });
-
-  if(exist){
-    loading.style.display = "none";
-    alert("Username sudah dipakai");
-    return;
-  }
+  if(exist){ loading.style.display = "none"; alert("Username sudah dipakai"); return; }
 
   const id = "USR" + Date.now();
-
-  // USERS
-  await setDoc(doc(db,"users",id),{
-    username,
-    password,
-    role: "driver",
-    driverId: id
-  });
-
-  // DRIVERS
-  await setDoc(doc(db,"drivers",id),{
-    driverId: id,
-    namaDriver: username,
-    username,
-    createdAt: Date.now()
-  });
+  await setDoc(doc(db,"users",id),{ username, password, role: "driver", driverId: id });
+  await setDoc(doc(db,"drivers",id),{ driverId: id, namaDriver: username, username, createdAt: Date.now() });
 
   loading.style.display = "none";
-
   alert("Berhasil daftar! Silakan login");
-
-  // 🔥 ISI ULANG INPUT (FIX UTAMA)
   usernameEl.value = username;
   passwordEl.value = password;
-
-  // pindah ke login
-  if(mode === "register"){
-    toggleMode();
-  }
-
-  // ================= OPTIONAL AUTO LOGIN =================
-  /*
-  localStorage.setItem("login","true");
-  localStorage.setItem("username",username);
-  localStorage.setItem("role","driver");
-  localStorage.setItem("driverId",id);
-
-  window.location.href = "driver.html";
-  */
+  if(mode === "register"){ toggleMode(); }
 };
 
 // ================= LOGIN =================
 window.login = async function(){
-
   const username = document.getElementById("username").value.trim();
   const password = document.getElementById("password").value.trim();
   const loading = document.getElementById("loading");
 
-  if(!username || !password){
-    alert("Isi username & password");
-    return;
-  }
-
+  if(!username ||!password){ alert("Isi username & password"); return; }
   loading.style.display = "block";
 
-  const snapshot = await getDocs(collection(db,"users"));
-
-  let found = null;
-
-  snapshot.forEach(docSnap=>{
-    const u = docSnap.data();
-    if(u.username === username && u.password === password){
-      found = u;
-    }
-  });
-
+  const q = query(collection(db,"users"), where("username","==",username), where("password","==",password));
+  const snapshot = await getDocs(q);
   loading.style.display = "none";
 
-  if(!found){
-    alert("Login gagal");
-    return;
-  }
+  if(snapshot.empty){ alert("Login gagal. Username/Password salah"); return; }
 
-  // simpan session
+  const found = snapshot.docs[0].data();
   localStorage.setItem("login","true");
   localStorage.setItem("username",found.username);
   localStorage.setItem("role",found.role);
   localStorage.setItem("driverId",found.driverId);
 
- // redirect
-if(found.role === "admin"){
-  window.location.href = "dashboard.html";
-} else {
-  window.location.href = "input.html";
-}
+  if(found.role === "admin"){ window.location.href = "dashboard.html"; }
+  else { window.location.href = "input.html"; }
 };
 
-</script>
+// ================= LUPA PASSWORD =================
+window.showLupaPass = function(){ document.getElementById("popupLupa").style.display = "flex"; }
+window.closeLupa = function(){ document.getElementById("popupLupa").style.display = "none"; }
 
+window.resetPassword = async function(){
+  const user = document.getElementById("resetUser").value.trim();
+  const passBaru = document.getElementById("resetPassBaru").value.trim();
+  if(!user ||!passBaru){ alert("Isi semua"); return; }
+
+  const q = query(collection(db,"users"), where("username","==",user));
+  const snap = await getDocs(q);
+
+  if(snap.empty){ alert("Username tidak ditemukan"); return; }
+
+  const docId = snap.docs[0].id;
+  await updateDoc(doc(db,"users",docId),{ password: passBaru });
+
+  alert("✅ Password berhasil direset");
+  closeLupa();
+}
+</script>
 </body>
 </html>

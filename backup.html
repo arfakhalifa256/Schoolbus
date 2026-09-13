@@ -108,7 +108,11 @@ table {
       line-height:1.6;
       margin-bottom:12px;
     }
-
+.btn-back {
+  background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25);
+  color: #fff; width: 38px; height: 38px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center; cursor:pointer
+}
     .btn{
       width:100%;
       border:none;
@@ -245,105 +249,149 @@ table {
   .btn{width:100%; margin-bottom:8px} /* tombol full */
 }
 
-    /* ===== SIDEBAR ===== */
-.sidebar{
-  position: fixed;
+/* ===== HEADER BARU ===== */
+header {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: #fff; /* 🔥 tadi kamu tulis color:blue */
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(30,144,255,0.3);
+  position: sticky;
   top: 0;
-  left: 0;
-  width: 240px;
-  height: 100%;
-  background: #111827;
+  z-index: 100;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand img {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px; /* kotak rounded biar modern */
+  object-fit: cover;
+  background: #fff;
+  padding: 3px;
+  box-shadow:0 2px 6px rgba(0,0,0,0.1)
+}
+
+.brand-text .subtitle {
+  font-size: 10px;
+  opacity: 0.9;
+  line-height: 1;
+  letter-spacing:0.5px
+}
+
+.brand-text .title {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.header-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.header-actions .btn-back {
+  background: rgba(255,255,255,0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.3);
   color: #fff;
-  padding: 16px;
-  transform: translateX(-100%);
-  transition: 0.3s ease;
-  z-index: 999;
-  overflow-y: auto;
-}
-
-.sidebar.show{
-  transform: translateX(0);
-}
-
-.sidebar h2{
-  margin-bottom: 15px;
-}
-
-.sidebar a{
-  display: block;
-  color: #fff;
-  text-decoration: none;
-  padding: 10px;
-  border-radius: 8px;
-  margin-bottom: 6px;
-}
-
-.sidebar a:hover{
-  background: #1e90ff;
-}
-
-.sidebar a.active{
-  background: #1e90ff;
-}
-
-/* ===== BUTTON ===== */
-.toggle-btn{
-  position: fixed;
-  top: 12px;
-  left: 12px;
-  z-index: 1000;
-  background: #1e90ff;
-  color: white;
-  border: none;
-  padding: 10px 12px;
+  width: 36px;
+  height: 36px;
+  padding: 0;
   border-radius: 10px;
-  font-size: 18px;
-}
-.overlay{
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.4);
-  z-index: 900;
-  opacity: 0;
-  pointer-events: none;
-  transition: .3s;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.overlay.show{
-  opacity: 1;
-  pointer-events: auto;
+.header-actions .btn-back:hover {
+  background: rgba(255,255,255,0.3);
+  transform: translateX(-2px);
+}
+
+@media(max-width:768px){
+  .brand-text .title{font-size:14px}
+  .brand img{width:36px;height:36px}
+}
+  .header-right{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.user-info{
+  text-align:right;
+   /* disembunyikan di HP kecil */
+}
+
+.user-name{
+  font-size:12px;
+  font-weight:700;
+  line-height:1.2;
+}
+
+.user-role{
+  font-size:9px;
+  background:rgba(255,255,255,0.25);
+  padding:2px 6px;
+  border-radius:20px;
+  font-weight:600;
+  letter-spacing:0.5px;
+}
+
+@media(min-width:480px){
+  .user-info{display:block} /* muncul kalau layar > 480px */
 }
   </style>
 </head>
 <body>
-<!-- ===== TOGGLE BUTTON ===== -->
-<button class="toggle-btn" onclick="toggleSidebar()">☰</button>
-
-<!-- ===== SIDEBAR ===== -->
-<div class="sidebar" id="sidebar">
-  <h2>School Bus</h2>
-
-  <a href="dashboard.html">🏠 Dashboard</a>
-  <a href="input.html">📝 Input Perjalanan </a>
-  <a href="driver.html">🧑‍✈️ Driver</a>
-  <a href="cari.html">✏️ Edit</a>
-  <a href="lapor.html">📊 Laporan</a>
-  <a href="backup.html">💾 Backup</a>
-  <a href="config.html">⚙️ Config</a>
-  <a href="bbm.html" class="active">⛽ BBM</a>
-  <a href="user.html">👤 User</a>
-
-  <hr>
-  <a href="#" onclick="logout()">🚪 Logout</a>
-</div>
-<div id="overlay" class="overlay" onclick="toggleSidebar()"></div>
-  <div class="header">
-    <h1>Backup & Restore Firebase</h1>
-    <p>Backup semua data Firestore ke file JSON dan restore kembali saat dibutuhkan.</p>
+<header>
+  <div class="header-left">
+    <div class="brand">
+      <img src="img/icon-192.png">
+      <div class="brand-text">
+        <div class="subtitle">SCHOOL BUS</div>
+        <div class="title">ARFA</div>
+      </div>
+    </div>
   </div>
+  
+  <div class="header-right">
+    <div class="user-info">
+      <div class="user-name" id="namaHeader">Admin</div>
+      <div class="user-role" id="roleHeader">ADMIN</div>
+    </div>
+    <button class="btn-back" onclick="kembali()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path d="M19 12H5M12 19l-7-7 7-7"/>
+      </svg>
+    </button>
+  </div>
+</header>
+
+  </style>
+</head>
+<body>
+
+  
 
   <div class="card">
     <h3>Backup Data</h3>
@@ -635,6 +683,9 @@ document.querySelectorAll(".sidebar a").forEach(a=>{
     document.getElementById("sidebar").classList.remove("show");
   });
 });
+  window.kembali=function(){
+  window.location.href="dashboard.html";
+}
 </script>
  
 </body>
