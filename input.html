@@ -1,181 +1,260 @@
-<!DOCTYPE html>
-<html lang="id">
+<!DOCTYPE html><html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Input Perjalanan School Bus</title>
-  <link rel="manifest" href="manifest.json">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Input Perjalanan School Bus</title><link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#1e90ff">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="School Bus App">
-  <style>
-  /* 🔥 FIX ANTI LUBER DI APK */
-html, body {
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden; /* kunci geser ke samping */
+<meta name="apple-mobile-web-app-title" content="School Bus App"><style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
 }
 
-* {
-  box-sizing: border-box; /* biar padding ga nambahin lebar */
+:root{
+  --primary:#1e90ff;
+  --primary-dark:#187bdb;
+  --success:#16a34a;
+  --bg:#f4f7fb;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --border:#dbe3ee;
+  --shadow:0 8px 24px rgba(15,23,42,.08);
+  --radius:18px;
 }
 
-.card, .table-wrapper {
-  width: 100%;
-  max-width: 100%;
+html,
+body{
+  width:100%;
+  max-width:100%;
+  overflow-x:hidden;
 }
 
-.table-wrapper {
-  overflow-x: auto; /* tabel boleh scroll ke samping, tapi halamannya jangan */
-  -webkit-overflow-scrolling: touch; /* biar smooth di HP */
+body{
+  font-family:Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  padding:0;
+  padding-bottom:30px;
+  max-width:760px;
+  margin:0 auto;
 }
 
-table {
-  min-width: 100%; /* 🔥 JANGAN 700px. Biar ngikutin layar */
-  width: max-content; /* tapi kalau isinya banyak tetap bisa scroll */
-}
-  @media(max-width:768px){
-  body{margin-left:0; padding:10px} /* 🔥 padding dikecilin biar ga luber */
-  ..menu-toggle{display:block;position:fixed;top:10px;left:10px;background:#1e90ff;color:#fff;border:none;padding:8px 10px;border-radius:8px;z-index:1100}
-  
-  th, td{font-size:11px;padding:6px;white-space:nowrap}
-  h2{font-size:16px}
-  .card{padding:10px}
-  
-  /* 🔥 TAMBAHAN BUAT APK */
-  .filter-container{flex-direction:column} /* filter numpuk ke bawah */
-  .btn{width:100%; margin-bottom:8px} /* tombol full */
-}
-    *{box-sizing:border-box;margin:0;padding:0}
-    :root{
-      --primary:#1e90ff;--primary-dark:#187bdb;--success:#16a34a;
-      --bg:#f4f7fb;--card:#ffffff;--text:#1f2937;--muted:#6b7280;
-      --border:#dbe3ee;--shadow:0 8px 24px rgba(15,23,42,.08);--radius:18px;
-    }
-    body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);padding:16px;padding-bottom:90px;max-width:760px;margin:0 auto}
-  .card{background:var(--card);border-radius:var(--radius);padding:16px;margin-bottom:16px;box-shadow:var(--shadow);border:1px solid #edf2f7}
-    h3{margin-bottom:12px;color:#111827;font-size:18px}
-    label{display:block;font-size:14px;font-weight:600;margin-bottom:6px;margin-top:12px;color:#374151}
-    input,select,textarea{width:100%;border:1px solid var(--border);border-radius:12px;padding:12px 14px;font-size:14px;outline:none;background:#fff;transition:.2s ease}
-    textarea{min-height:90px;resize:vertical;font-family:Arial,sans-serif}
-    input:focus,select:focus,textarea:focus{border-color:var(--primary);box-shadow:0 0 0 4px rgba(30,144,255,.10)}
-    input[readonly]{background:#f8fafc;color:#6b7280;font-weight:700}
-  .save{width:100%;border:none;border-radius:12px;padding:13px 14px;font-size:14px;font-weight:700;color:#fff;cursor:pointer;margin-top:14px;background:var(--primary);transition:.2s ease}
-  .save:hover{background:var(--primary-dark)}
-  .full{width:100%}
-    #previewTotal{margin-top:14px;padding:12px 14px;border-radius:12px;background:#eff6ff;color:#1d4ed8;font-weight:700;text-align:center;font-size:16px}
-  .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#111827;color:#fff;padding:12px 16px;border-radius:10px;opacity:0;pointer-events:none;transition:.25s;z-index:9999;max-width:90%;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.18)}
-  .toast.show{opacity:1}
-  .mini-note{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.5}
-  .section-box{padding:12px;border:1px dashed var(--border);border-radius:14px;margin-top:12px;background:#fafcff}
-   .toggle-btn{position:fixed;top:12px;left:12px;background:#1e90ff;color:#fff;border:none;padding:10px;border-radius:10px;z-index:1100;cursor:pointer}
-    @media(min-width:768px){
-    .sidebar{left:0}
-    .toggle-btn{display:none}
-      body{margin-left:240px}
-    }
-    #driverCard label{font-weight:bold}
-  h4{font-size:10px}
-  
-
-/* ===== HEADER BARU ===== */
-header {
-  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-  color: #fff; /* 🔥 tadi kamu tulis color:blue */
-  padding: 12px 16px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 4px 12px rgba(30,144,255,0.3);
-  position: sticky;
-  top: 0;
-  z-index: 100;
+.card{
+  width:100%;
+  max-width:100%;
+  background:var(--card);
+  border-radius:var(--radius);
+  padding:16px;
+  margin:16px 0;
+  box-shadow:var(--shadow);
+  border:1px solid #edf2f7;
 }
 
-.header-left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+h3{
+  margin-bottom:12px;
+  color:#111827;
+  font-size:18px;
 }
 
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+label{
+  display:block;
+  font-size:14px;
+  font-weight:600;
+  margin-bottom:6px;
+  margin-top:12px;
+  color:#374151;
 }
 
-.brand img {
-  width: 40px;
-  height: 40px;
-  border-radius: 12px; /* kotak rounded biar modern */
-  object-fit: cover;
-  background: #fff;
-  padding: 3px;
-  box-shadow:0 2px 6px rgba(0,0,0,0.1)
+input,
+select,
+textarea{
+  width:100%;
+  max-width:100%;
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:12px 14px;
+  font-size:14px;
+  outline:none;
+  background:#fff;
+  transition:.2s ease;
 }
 
-.brand-text .subtitle {
-  font-size: 10px;
-  opacity: 0.9;
-  line-height: 1;
-  letter-spacing:0.5px
+textarea{
+  min-height:90px;
+  resize:vertical;
+  font-family:Arial,sans-serif;
 }
 
-.brand-text .title {
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 1.2;
+input:focus,
+select:focus,
+textarea:focus{
+  border-color:var(--primary);
+  box-shadow:0 0 0 4px rgba(30,144,255,.10);
 }
 
-.header-actions {
-  display: flex;
-  gap: 8px;
-  align-items: center;
+input[readonly]{
+  background:#f8fafc;
+  color:#6b7280;
+  font-weight:700;
 }
 
-.header-actions .btn-back {
-  background: rgba(255,255,255,0.2);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255,255,255,0.3);
-  color: #fff;
-  width: 36px;
-  height: 36px;
-  padding: 0;
-  border-radius: 10px;
-  font-size: 11px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.save{
+  width:100%;
+  border:none;
+  border-radius:12px;
+  padding:13px 14px;
+  font-size:14px;
+  font-weight:700;
+  color:#fff;
+  cursor:pointer;
+  margin-top:14px;
+  background:var(--primary);
+  transition:.2s ease;
 }
 
-.header-actions .btn-back:hover {
-  background: rgba(255,255,255,0.3);
-  transform: translateX(-2px);
+.save:hover{
+  background:var(--primary-dark);
 }
 
-@media(max-width:768px){
-  .brand-text .title{font-size:14px}
-  .brand img{width:36px;height:36px}
+.save:active{
+  transform:scale(.99);
 }
-  .header-right{
+
+.full{
+  width:100%;
+}
+
+#previewTotal{
+  margin-top:14px;
+  padding:12px 14px;
+  border-radius:12px;
+  background:#eff6ff;
+  color:#1d4ed8;
+  font-weight:700;
+  text-align:center;
+  font-size:16px;
+}
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:24px;
+  transform:translateX(-50%);
+  background:#111827;
+  color:#fff;
+  padding:12px 16px;
+  border-radius:10px;
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
+  z-index:9999;
+  max-width:90%;
+  text-align:center;
+  box-shadow:0 10px 30px rgba(0,0,0,.18);
+}
+
+.toast.show{
+  opacity:1;
+}
+
+.mini-note{
+  font-size:12px;
+  color:var(--muted);
+  margin-top:8px;
+  line-height:1.5;
+}
+
+.section-box{
+  padding:12px;
+  border:1px dashed var(--border);
+  border-radius:14px;
+  margin-top:12px;
+  background:#fafcff;
+}
+
+h4{
+  font-size:10px;
+  line-height:1.4;
+  color:#6b7280;
+  margin-top:3px;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+header{
+  width:100%;
+  background:linear-gradient(
+    135deg,
+    var(--primary),
+    var(--primary-dark)
+  );
+  color:#fff;
+  padding:12px 16px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  box-shadow:0 4px 12px rgba(30,144,255,.3);
+  position:sticky;
+  top:0;
+  z-index:100;
+}
+
+.header-left{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-width:0;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-width:0;
+}
+
+.brand img{
+  width:40px;
+  height:40px;
+  border-radius:12px;
+  object-fit:cover;
+  background:#fff;
+  padding:3px;
+  box-shadow:0 2px 6px rgba(0,0,0,.1);
+  flex-shrink:0;
+}
+
+.brand-text{
+  min-width:0;
+}
+
+.brand-text .subtitle{
+  font-size:10px;
+  opacity:.9;
+  line-height:1;
+  letter-spacing:.5px;
+}
+
+.brand-text .title{
+  font-size:16px;
+  font-weight:700;
+  line-height:1.2;
+}
+
+.header-right{
   display:flex;
   align-items:center;
   gap:10px;
 }
-  .btn-back {
-  background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25);
-  color: #fff; width: 38px; height: 38px; border-radius: 12px;
-  display: flex; align-items: center; justify-content: center; cursor:pointer
-}
 
 .user-info{
   text-align:right;
-   /* disembunyikan di HP kecil */
 }
 
 .user-name{
@@ -186,391 +265,1544 @@ header {
 
 .user-role{
   font-size:9px;
-  background:rgba(255,255,255,0.25);
+  background:rgba(255,255,255,.25);
   padding:2px 6px;
   border-radius:20px;
   font-weight:600;
-  letter-spacing:0.5px;
+  letter-spacing:.5px;
+}
+
+.btn-back{
+  background:rgba(255,255,255,.15);
+  backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.3);
+  color:#fff;
+  width:38px;
+  height:38px;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  flex-shrink:0;
+  transition:.2s ease;
+}
+
+.btn-back:hover{
+  background:rgba(255,255,255,.3);
+  transform:translateX(-2px);
+}
+
+.btn-back:active{
+  transform:scale(.94);
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:768px){
+
+  body{
+    padding:0;
+    padding-bottom:20px;
+  }
+
+  .card{
+    width:calc(100% - 20px);
+    margin:10px;
+    padding:12px;
+  }
+
+  th,
+  td{
+    font-size:11px;
+    padding:6px;
+    white-space:nowrap;
+  }
+
+  h2{
+    font-size:16px;
+  }
+
+  .brand-text .title{
+    font-size:14px;
+  }
+
+  .brand img{
+    width:36px;
+    height:36px;
+  }
+
+  .user-info{
+    display:none;
+  }
+
+  header{
+    padding:10px 12px;
+  }
 }
 
 @media(min-width:480px){
-  .user-info{display:block} /* muncul kalau layar > 480px */
+
+  .user-info{
+    display:block;
+  }
 }
-  </style>
-</head>
-<body>
-<header>
-  <div class="header-left">
-    <div class="brand">
-      <img src="img/icon-192.png">
-      <div class="brand-text">
-        <div class="subtitle">SCHOOL BUS</div>
-        <div class="title">ARFA</div>
-      </div>
-    </div>
-  </div>
-  
-  <div class="header-right">
-    <div class="user-info">
-      <div class="user-name" id="namaHeader">Admin</div>
-      <div class="user-role" id="roleHeader">ADMIN</div>
-    </div>
-    <button class="btn-back" onclick="kembali()">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-        <path d="M19 12H5M12 19l-7-7 7-7"/>
-      </svg>
-    </button>
-  </div>
-</header>
+</style></head><body><!-- =========================
+     HEADER
+========================= --><header>  <div class="header-left"><div class="brand">
 
+  <img
+    src="img/icon-192.png"
+    alt="School Bus ARFA"
+    onerror="this.style.display='none'"
+  >
 
-<div class="card" id="driverCard">
-  <label>Nama Driver</label>
-  <select id="pilihDriver">
-    <option value="">-- Memuat driver... --</option>
-  </select>
-  <button class="save full" onclick="lanjutSiswa()">➡️ Lanjut Input Siswa</button>
+  <div class="brand-text">
+    <div class="subtitle">SCHOOL BUS</div>
+    <div class="title">ARFA</div>
+  </div>
+
 </div>
 
-<div id="siswaContainer" style="display:none;">
-  <div class="card">
-    <h3>Driver: <span id="displayDriver">-</span></h3>
+  </div>  <div class="header-right"><div class="user-info">
 
-    <label>Tanggal</label>
-    <input type="date" id="tanggalInput">
-
-    <label>Nama Siswa</label>
-    <input type="text" id="namaSiswa" placeholder="Masukkan nama siswa">
-
-    <label>Kelas</label>
-    <input type="text" id="kelas" placeholder="Masukkan kelas">
-
-    <label>Alamat</label>
-    <textarea id="alamat" placeholder="Masukkan alamat siswa"></textarea>
-
-    <label>No.Telepon</label>
-    <input type="tel" id="noTelepon" placeholder="Masukkan no.telepon"> <!-- 🔥 FIX -->
-
-    <label>Jarak (Km)</label>
-    <input type="number" id="jarak" step="0.1" placeholder="Masukkan jarak" oninput="updateHarga()">
-
-    <label>Trayek</label>
-    <h4>Trayek PP yng dijalankan oleh 2 driver pilih pagi/sore sesuai driver dan pilih discount PP 10%</h4>
-    <select id="trayek" onchange="ubahTrayek()">
-      <option value="">-- Pilih Trayek --</option>
-      <option value="pergi">Pergi</option>
-      <option value="pulang">Pulang</option>
-      <option value="pp">PP</option>
-    </select>
-
-    <div id="onewaySection" class="section-box" style="display:none;">
-      <label>Harga One Way (Rp)</label>
-      <input id="hargaOneWay" readonly>
-      <label>Diskon (%)</label>
-      <h4>khusus PP di jalankan 2 driver disc 10 %</h4>
-      <input type="number" id="discOneWay" placeholder="0" oninput="hitungTotal()">
-      <label>Total (Rp)</label>
-      <input id="totalOneWay" readonly>
-    </div>
-
-    <div id="ppSection" class="section-box" style="display:none;">
-      <label>Harga PP (Rp)</label>
-      <input id="hargaPP" readonly>
-      <label>Diskon (%)</label>
-      <h4>khusus PP disc 10 %</h4>
-      <input type="number" id="discPP" value="0" oninput="hitungTotal()">
-      <label>Total PP (Rp)</label>
-      <input id="totalPP" readonly>
-    </div>
-
-    <button class="save" onclick="simpanData()">💾 Simpan Data</button>
-    <div id="previewTotal">Preview Total: Rp 0</div>
+  <div
+    class="user-name"
+    id="namaHeader"
+  >
+    Admin
   </div>
+
+  <div
+    class="user-role"
+    id="roleHeader"
+  >
+    ADMIN
+  </div>
+
 </div>
 
-<div id="toast" class="toast"></div>
+<!-- TOMBOL KEMBALI -->
+<button
+  type="button"
+  class="btn-back"
+  id="btnKembali"
+  aria-label="Kembali ke dashboard"
+  title="Kembali"
+>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, collection, getDocs, addDoc, doc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  <svg
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <path d="M19 12H5"></path>
+    <path d="M12 19l-7-7 7-7"></path>
+  </svg>
+
+</button>
+
+  </div></header><!-- =========================
+     PILIH DRIVER
+========================= --><div
+  class="card"
+  id="driverCard"
+>  <label for="pilihDriver">
+    Nama Driver
+  </label>  <select id="pilihDriver"><option value="">
+  -- Memuat driver...
+</option>
+
+  </select><button
+type="button"
+class="save full"
+id="btnLanjut"
+
+«»
+
+➡️ Lanjut Input Siswa
+
+  </button></div><!-- =========================
+     INPUT SISWA
+========================= --><div
+  id="siswaContainer"
+  style="display:none;"
+>  <div class="card"><h3>
+  Driver:
+  <span id="displayDriver">-</span>
+</h3>
+
+
+<label for="tanggalInput">
+  Tanggal
+</label>
+
+<input
+  type="date"
+  id="tanggalInput"
+>
+
+
+<label for="namaSiswa">
+  Nama Siswa
+</label>
+
+<input
+  type="text"
+  id="namaSiswa"
+  placeholder="Masukkan nama siswa"
+  autocomplete="off"
+>
+
+
+<label for="kelas">
+  Kelas
+</label>
+
+<input
+  type="text"
+  id="kelas"
+  placeholder="Masukkan kelas"
+  autocomplete="off"
+>
+
+
+<label for="alamat">
+  Alamat
+</label>
+
+<textarea
+  id="alamat"
+  placeholder="Masukkan alamat siswa"
+></textarea>
+
+
+<label for="noTelepon">
+  No. Telepon
+</label>
+
+<input
+  type="tel"
+  id="noTelepon"
+  placeholder="Masukkan no. telepon"
+  inputmode="tel"
+  autocomplete="tel"
+>
+
+
+<label for="jarak">
+  Jarak (Km)
+</label>
+
+<input
+  type="number"
+  id="jarak"
+  step="0.1"
+  min="0.1"
+  placeholder="Masukkan jarak"
+  inputmode="decimal"
+>
+
+
+<label for="trayek">
+  Trayek
+</label>
+
+<h4>
+  Trayek PP yang dijalankan oleh 2 driver.
+  Pilih pagi/sore sesuai driver dan pilih discount PP 10%.
+</h4>
+
+<select id="trayek">
+
+  <option value="">
+    -- Pilih Trayek --
+  </option>
+
+  <option value="pergi">
+    Pergi
+  </option>
+
+  <option value="pulang">
+    Pulang
+  </option>
+
+  <option value="pp">
+    PP
+  </option>
+
+</select>
+
+
+<!-- =========================
+     ONE WAY
+========================= -->
+
+<div
+  id="onewaySection"
+  class="section-box"
+  style="display:none;"
+>
+
+  <label for="hargaOneWay">
+    Harga One Way (Rp)
+  </label>
+
+  <input
+    id="hargaOneWay"
+    readonly
+  >
+
+
+  <label for="discOneWay">
+    Diskon (%)
+  </label>
+
+  <h4>
+    Khusus PP yang dijalankan 2 driver dapat diskon 10%.
+  </h4>
+
+  <input
+    type="number"
+    id="discOneWay"
+    min="0"
+    max="100"
+    value="0"
+    placeholder="0"
+    inputmode="decimal"
+  >
+
+
+  <label for="totalOneWay">
+    Total (Rp)
+  </label>
+
+  <input
+    id="totalOneWay"
+    readonly
+  >
+
+</div>
+
+
+<!-- =========================
+     PP
+========================= -->
+
+<div
+  id="ppSection"
+  class="section-box"
+  style="display:none;"
+>
+
+  <label for="hargaPP">
+    Harga PP (Rp)
+  </label>
+
+  <input
+    id="hargaPP"
+    readonly
+  >
+
+
+  <label for="discPP">
+    Diskon (%)
+  </label>
+
+  <h4>
+    Khusus PP diskon 10%.
+  </h4>
+
+  <input
+    type="number"
+    id="discPP"
+    min="0"
+    max="100"
+    value="0"
+    placeholder="0"
+    inputmode="decimal"
+  >
+
+
+  <label for="totalPP">
+    Total PP (Rp)
+  </label>
+
+  <input
+    id="totalPP"
+    readonly
+  >
+
+</div>
+
+
+<!-- =========================
+     SIMPAN
+========================= -->
+
+<button
+  type="button"
+  class="save"
+  id="btnSimpan"
+>
+  💾 Simpan Data
+</button>
+
+
+<div id="previewTotal">
+  Preview Total: Rp 0
+</div>
+
+  </div></div><div
+  id="toast"
+  class="toast"
+></div><script type="module">
+
+/* =====================================================
+   FIREBASE
+===================================================== */
+
+import {
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  addDoc,
+  doc,
+  getDoc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBxbArCZ6iIWQ8wS7QIonZOeN4t_r9o2WU",
-  authDomain: "schoolbus-6a7fd.firebaseapp.com",
-  databaseURL: "https://schoolbus-6a7fd-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "schoolbus-6a7fd",
-  storageBucket: "schoolbus-6a7fd.firebasestorage.app",
-  messagingSenderId: "486602913199",
-  appId: "1:486602913199:web:9547f39f5f57f9c87b2b5a"
+
+  apiKey:
+    "AIzaSyBxbArCZ6iIWQ8wS7QIonZOeN4t_r9o2WU",
+
+  authDomain:
+    "schoolbus-6a7fd.firebaseapp.com",
+
+  databaseURL:
+    "https://schoolbus-6a7fd-default-rtdb.asia-southeast1.firebasedatabase.app",
+
+  projectId:
+    "schoolbus-6a7fd",
+
+  storageBucket:
+    "schoolbus-6a7fd.firebasestorage.app",
+
+  messagingSenderId:
+    "486602913199",
+
+  appId:
+    "1:486602913199:web:9547f39f5f57f9c87b2b5a"
+
 };
+
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const role = localStorage.getItem("role");
-const driverIdLogin = localStorage.getItem("driverId");
+
+/* =====================================================
+   LOGIN
+===================================================== */
+
+const role =
+  localStorage.getItem("role");
+
+const driverIdLogin =
+  localStorage.getItem("driverId");
 
 let selectedDriver = null;
 let daftarDriver = [];
-let configHarga = { hargaDasar: 608000, kenaikanPerTitik: 7800 };
 
-document.addEventListener("DOMContentLoaded", async () => {
-  if(!role){
-    location.href = "index.html";
-    return;
-  }
-  document.getElementById("tanggalInput").value = getToday();
-  await loadConfigHarga();
-  await loadDrivers();
 
-  if(role!== "admin"){
-    document.getElementById("menuUser").style.display = "none";
-    document.getElementById("menuLaporan").style.display = "none";
-    document.getElementById("menuConfig").style.display = "none";
-    document.getElementById("menuDriver").style.display = "none";
-  }
-});
+/* =====================================================
+   DEFAULT HARGA
+===================================================== */
 
-async function loadDrivers(){
-  const pilihDriver = document.getElementById("pilihDriver");
-  try{
-    const snapshot = await getDocs(collection(db, "drivers"));
-    daftarDriver = [];
-    snapshot.forEach((docSnap)=>{
-      const data = docSnap.data();
-      daftarDriver.push({
-        docId: docSnap.id,
-        nama: data.namaDriver || data.nama || data.username || "Tanpa Nama" // 🔥 sinkron
-      });
-    });
-    daftarDriver.sort((a,b)=>a.nama.localeCompare(b.nama,"id"));
+let configHarga = {
 
-    if(role === "admin"){
-      pilihDriver.innerHTML = '<option value="">-- Pilih Driver --</option>';
-      daftarDriver.forEach((driver,i)=>{
-        const opt = document.createElement("option");
-        opt.value = i;
-        opt.textContent = driver.nama;
-        pilihDriver.appendChild(opt);
-      });
-    } else {
-      document.getElementById("driverCard").style.display = "none";
-      const driver = daftarDriver.find(d => d.docId === driverIdLogin);
-      if(!driver){
-        showToast("Driver tidak ditemukan");
-        return;
-      }
-      selectedDriver = driver;
-      document.getElementById("displayDriver").textContent = driver.nama;
-      document.getElementById("siswaContainer").style.display = "block";
-      resetFormAwal();
-    }
-  }catch(err){
-    console.error(err);
-    showToast("Gagal load driver");
-  }
+  hargaDasar: 608000,
+
+  kenaikanPerTitik: 7800
+
+};
+
+
+/* =====================================================
+   ELEMENT
+===================================================== */
+
+const pilihDriver =
+  document.getElementById("pilihDriver");
+
+const driverCard =
+  document.getElementById("driverCard");
+
+const siswaContainer =
+  document.getElementById("siswaContainer");
+
+const displayDriver =
+  document.getElementById("displayDriver");
+
+const tanggalInput =
+  document.getElementById("tanggalInput");
+
+const namaSiswa =
+  document.getElementById("namaSiswa");
+
+const kelas =
+  document.getElementById("kelas");
+
+const alamat =
+  document.getElementById("alamat");
+
+const noTelepon =
+  document.getElementById("noTelepon");
+
+const jarak =
+  document.getElementById("jarak");
+
+const trayek =
+  document.getElementById("trayek");
+
+const hargaOneWay =
+  document.getElementById("hargaOneWay");
+
+const discOneWay =
+  document.getElementById("discOneWay");
+
+const totalOneWay =
+  document.getElementById("totalOneWay");
+
+const hargaPP =
+  document.getElementById("hargaPP");
+
+const discPP =
+  document.getElementById("discPP");
+
+const totalPP =
+  document.getElementById("totalPP");
+
+const onewaySection =
+  document.getElementById("onewaySection");
+
+const ppSection =
+  document.getElementById("ppSection");
+
+const previewTotal =
+  document.getElementById("previewTotal");
+
+const toast =
+  document.getElementById("toast");
+
+const namaHeader =
+  document.getElementById("namaHeader");
+
+const roleHeader =
+  document.getElementById("roleHeader");
+
+const btnKembali =
+  document.getElementById("btnKembali");
+
+const btnLanjut =
+  document.getElementById("btnLanjut");
+
+const btnSimpan =
+  document.getElementById("btnSimpan");
+
+
+/* =====================================================
+   CEK LOGIN
+===================================================== */
+
+if(!role){
+
+  window.location.href =
+    "index.html";
+
+}else{
+
+  namaHeader.textContent =
+    localStorage.getItem("nama") ||
+    localStorage.getItem("username") ||
+    "Admin";
+
+  roleHeader.textContent =
+    String(role).toUpperCase();
+
 }
 
-function lanjutSiswa(){
-  const pilih = document.getElementById("pilihDriver").value;
-  if(pilih === ""){
-    showToast("Pilih driver dulu");
-    return;
-  }
-  selectedDriver = daftarDriver[Number(pilih)];
-  document.getElementById("displayDriver").textContent = selectedDriver.nama;
-  document.getElementById("siswaContainer").style.display = "block";
-  resetFormAwal();
-}
 
-function resetFormAwal(){
-  document.getElementById("trayek").value = "";
-  document.getElementById("jarak").value = "";
-  document.getElementById("discOneWay").value = "";
-  document.getElementById("discPP").value = "0";
-  document.getElementById("hargaOneWay").value = "";
-  document.getElementById("hargaPP").value = "";
-  document.getElementById("totalOneWay").value = "";
-  document.getElementById("totalPP").value = "";
-  document.getElementById("onewaySection").style.display = "none";
-  document.getElementById("ppSection").style.display = "none";
-  document.getElementById("previewTotal").textContent = "Preview Total: Rp 0";
-}
-
-function rupiah(angka){
-  return "Rp " + Number(angka || 0).toLocaleString("id-ID");
-}
+/* =====================================================
+   TANGGAL HARI INI
+===================================================== */
 
 function getToday(){
-  return new Date().toISOString().split("T")[0];
+
+  const d = new Date();
+
+  const tahun =
+    d.getFullYear();
+
+  const bulan =
+    String(d.getMonth() + 1)
+      .padStart(2,"0");
+
+  const tanggal =
+    String(d.getDate())
+      .padStart(2,"0");
+
+  return `${tahun}-${bulan}-${tanggal}`;
+
 }
+
+
+/* =====================================================
+   FORMAT RUPIAH
+===================================================== */
+
+function rupiah(angka){
+
+  return "Rp " +
+    Number(angka || 0)
+      .toLocaleString("id-ID");
+
+}
+
+
+/* =====================================================
+   TOAST
+===================================================== */
+
+let toastTimer = null;
 
 function showToast(msg){
-  const t = document.getElementById("toast");
-  t.textContent = msg;
-  t.classList.add("show");
-  setTimeout(()=>t.classList.remove("show"),2500);
+
+  toast.textContent = msg;
+
+  toast.classList.add("show");
+
+  clearTimeout(toastTimer);
+
+  toastTimer =
+    setTimeout(() => {
+
+      toast.classList.remove("show");
+
+    },2500);
+
 }
+
+
+/* =====================================================
+   LOAD CONFIG HARGA
+===================================================== */
 
 async function loadConfigHarga(){
+
   try{
-    const snap = await getDoc(doc(db,"config","harga"));
+
+    const snap =
+      await getDoc(
+        doc(db,"config","harga")
+      );
+
     if(snap.exists()){
-      configHarga = snap.data();
+
+      const data =
+        snap.data();
+
+      configHarga = {
+
+        hargaDasar:
+          Number(
+            data.hargaDasar ??
+            608000
+          ),
+
+        kenaikanPerTitik:
+          Number(
+            data.kenaikanPerTitik ??
+            7800
+          )
+
+      };
+
     }
-  }catch(e){
-    console.log("pakai default");
+
+  }catch(error){
+
+    console.log(
+      "Config harga tidak ditemukan, menggunakan default.",
+      error
+    );
+
   }
+
 }
 
-function hitungHargaDasar(jarak){
-  if (jarak <= 1) return configHarga.hargaDasar;
-  const titik = Math.ceil((jarak - 1) / 0.1); // 🔥 pake ceil biar 1.1 = 2 titik
-  return configHarga.hargaDasar + (titik * configHarga.kenaikanPerTitik);
+
+/* =====================================================
+   LOAD DRIVER
+===================================================== */
+
+async function loadDrivers(){
+
+  try{
+
+    pilihDriver.innerHTML =
+      '<option value="">-- Memuat driver... --</option>';
+
+    const snapshot =
+      await getDocs(
+        collection(db,"drivers")
+      );
+
+    daftarDriver = [];
+
+    snapshot.forEach(
+      (docSnap) => {
+
+        const data =
+          docSnap.data();
+
+        daftarDriver.push({
+
+          docId:
+            docSnap.id,
+
+          nama:
+            data.namaDriver ||
+            data.nama ||
+            data.username ||
+            "Tanpa Nama"
+
+        });
+
+      }
+    );
+
+
+    daftarDriver.sort(
+      (a,b) =>
+        a.nama.localeCompare(
+          b.nama,
+          "id"
+        )
+    );
+
+
+    /* ADMIN */
+
+    if(role === "admin"){
+
+      driverCard.style.display =
+        "block";
+
+      pilihDriver.innerHTML =
+        '<option value="">-- Pilih Driver --</option>';
+
+      daftarDriver.forEach(
+        (driver,index) => {
+
+          const opt =
+            document.createElement(
+              "option"
+            );
+
+          opt.value =
+            index;
+
+          opt.textContent =
+            driver.nama;
+
+          pilihDriver.appendChild(
+            opt
+          );
+
+        }
+      );
+
+    }
+
+
+    /* DRIVER LOGIN */
+
+    else{
+
+      driverCard.style.display =
+        "none";
+
+      const driver =
+        daftarDriver.find(
+          d =>
+            d.docId ===
+            driverIdLogin
+        );
+
+
+      if(!driver){
+
+        showToast(
+          "Driver tidak ditemukan"
+        );
+
+        return;
+
+      }
+
+
+      selectedDriver =
+        driver;
+
+      displayDriver.textContent =
+        driver.nama;
+
+      siswaContainer.style.display =
+        "block";
+
+      resetForm();
+
+    }
+
+  }catch(error){
+
+    console.error(
+      "Gagal load driver:",
+      error
+    );
+
+    showToast(
+      "Gagal memuat data driver"
+    );
+
+  }
+
 }
+
+
+/* =====================================================
+   LANJUT INPUT SISWA
+===================================================== */
+
+function lanjutSiswa(){
+
+  const pilih =
+    pilihDriver.value;
+
+  if(pilih === ""){
+
+    showToast(
+      "Pilih driver dulu"
+    );
+
+    return;
+
+  }
+
+
+  selectedDriver =
+    daftarDriver[
+      Number(pilih)
+    ];
+
+
+  if(!selectedDriver){
+
+    showToast(
+      "Driver tidak valid"
+    );
+
+    return;
+
+  }
+
+
+  displayDriver.textContent =
+    selectedDriver.nama;
+
+  siswaContainer.style.display =
+    "block";
+
+  resetForm();
+
+  siswaContainer.scrollIntoView({
+    behavior:"smooth",
+    block:"start"
+  });
+
+}
+
+
+/* =====================================================
+   RESET FORM
+===================================================== */
+
+function resetForm(){
+
+  tanggalInput.value =
+    getToday();
+
+  namaSiswa.value = "";
+  kelas.value = "";
+  alamat.value = "";
+  noTelepon.value = "";
+  jarak.value = "";
+
+  trayek.value = "";
+
+  discOneWay.value = "0";
+  discPP.value = "0";
+
+  hargaOneWay.value = "";
+  hargaPP.value = "";
+
+  totalOneWay.value = "";
+  totalPP.value = "";
+
+  onewaySection.style.display =
+    "none";
+
+  ppSection.style.display =
+    "none";
+
+  previewTotal.textContent =
+    "Preview Total: Rp 0";
+
+}
+
+
+/* =====================================================
+   HITUNG HARGA DASAR
+===================================================== */
+
+function hitungHargaDasar(jarakValue){
+
+  const jarakAngka =
+    Number(jarakValue || 0);
+
+
+  if(jarakAngka <= 1){
+
+    return Number(
+      configHarga.hargaDasar
+    );
+
+  }
+
+
+  /*
+    Contoh:
+
+    1.1 km
+    (1.1 - 1) / 0.1 = 1
+    = 1 titik
+
+    1.2 km
+    = 2 titik
+  */
+
+  const titik =
+    Math.ceil(
+      (
+        jarakAngka - 1
+      ) / 0.1
+    );
+
+
+  return Number(
+    configHarga.hargaDasar
+  ) +
+  (
+    titik *
+    Number(
+      configHarga.kenaikanPerTitik
+    )
+  );
+
+}
+
+
+/* =====================================================
+   UBAH TRAYEK
+===================================================== */
 
 function ubahTrayek(){
-  const trayek = document.getElementById("trayek").value;
-  const oneway = document.getElementById("onewaySection");
-  const pp = document.getElementById("ppSection");
 
-  if(trayek === "pergi" || trayek === "pulang"){
-    oneway.style.display = "block";
-    pp.style.display = "none";
-  } else if(trayek === "pp"){
-    oneway.style.display = "none";
-    pp.style.display = "block";
-  } else {
-    oneway.style.display = "none";
-    pp.style.display = "none";
+  const nilai =
+    trayek.value;
+
+
+  if(
+    nilai === "pergi" ||
+    nilai === "pulang"
+  ){
+
+    onewaySection.style.display =
+      "block";
+
+    ppSection.style.display =
+      "none";
+
   }
+
+  else if(
+    nilai === "pp"
+  ){
+
+    onewaySection.style.display =
+      "none";
+
+    ppSection.style.display =
+      "block";
+
+  }
+
+  else{
+
+    onewaySection.style.display =
+      "none";
+
+    ppSection.style.display =
+      "none";
+
+  }
+
+
   updateHarga();
+
 }
+
+
+/* =====================================================
+   UPDATE HARGA
+===================================================== */
 
 function updateHarga(){
-  const jarak = Number(document.getElementById("jarak").value || 0);
-  const trayek = document.getElementById("trayek").value;
-  if(!jarak ||!trayek) return;
 
-  const harga = hitungHargaDasar(jarak);
+  const jarakValue =
+    Number(
+      jarak.value || 0
+    );
 
-  if(trayek === "pergi" || trayek === "pulang"){
-    document.getElementById("hargaOneWay").value = rupiah(Math.round(harga));
+  const trayekValue =
+    trayek.value;
+
+
+  if(
+    !jarakValue ||
+    !trayekValue
+  ){
+
+    return;
+
   }
-  if(trayek === "pp"){
-    document.getElementById("hargaPP").value = rupiah(Math.round(harga * 2));
+
+
+  const harga =
+    hitungHargaDasar(
+      jarakValue
+    );
+
+
+  if(
+    trayekValue === "pergi" ||
+    trayekValue === "pulang"
+  ){
+
+    hargaOneWay.value =
+      rupiah(
+        Math.round(harga)
+      );
+
   }
+
+
+  if(
+    trayekValue === "pp"
+  ){
+
+    hargaPP.value =
+      rupiah(
+        Math.round(
+          harga * 2
+        )
+      );
+
+  }
+
+
   hitungTotal();
+
 }
+
+
+/* =====================================================
+   HITUNG TOTAL
+===================================================== */
 
 function hitungTotal(){
-  const jarak = Number(document.getElementById("jarak").value || 0);
-  const trayek = document.getElementById("trayek").value;
-  if(!jarak ||!trayek) return 0;
 
-  const harga = hitungHargaDasar(jarak);
+  const jarakValue =
+    Number(
+      jarak.value || 0
+    );
+
+  const trayekValue =
+    trayek.value;
+
+
+  if(
+    !jarakValue ||
+    !trayekValue
+  ){
+
+    previewTotal.textContent =
+      "Preview Total: Rp 0";
+
+    return 0;
+
+  }
+
+
+  const harga =
+    hitungHargaDasar(
+      jarakValue
+    );
+
+
   let total = 0;
 
-  if(trayek === "pergi" || trayek === "pulang"){
-    const diskon = Number(document.getElementById("discOneWay").value || 0);
-    total = harga - (harga * diskon / 100);
-    document.getElementById("totalOneWay").value = rupiah(Math.round(total));
+
+  /* ONE WAY */
+
+  if(
+    trayekValue === "pergi" ||
+    trayekValue === "pulang"
+  ){
+
+    let diskon =
+      Number(
+        discOneWay.value || 0
+      );
+
+
+    diskon =
+      Math.min(
+        100,
+        Math.max(0,diskon)
+      );
+
+
+    total =
+      harga -
+      (
+        harga *
+        diskon /
+        100
+      );
+
+
+    totalOneWay.value =
+      rupiah(
+        Math.round(total)
+      );
+
   }
 
-  if(trayek === "pp"){
-    const hargaPP = harga * 2;
-    const diskon = Number(document.getElementById("discPP").value || 0);
-    total = hargaPP - (hargaPP * diskon / 100);
-    document.getElementById("totalPP").value = rupiah(Math.round(total));
+
+  /* PP */
+
+  if(
+    trayekValue === "pp"
+  ){
+
+    const hargaPPValue =
+      harga * 2;
+
+
+    let diskon =
+      Number(
+        discPP.value || 0
+      );
+
+
+    diskon =
+      Math.min(
+        100,
+        Math.max(0,diskon)
+      );
+
+
+    total =
+      hargaPPValue -
+      (
+        hargaPPValue *
+        diskon /
+        100
+      );
+
+
+    totalPP.value =
+      rupiah(
+        Math.round(total)
+      );
+
   }
 
-  document.getElementById("previewTotal").textContent = "Preview Total: " + rupiah(Math.round(total));
-  return Math.round(total);
+
+  total =
+    Math.round(total);
+
+
+  previewTotal.textContent =
+    "Preview Total: " +
+    rupiah(total);
+
+
+  return total;
+
 }
+
+
+/* =====================================================
+   VALIDASI TELEPON
+===================================================== */
+
+function normalisasiTelepon(no){
+
+  return String(no || "")
+    .trim()
+    .replace(/\s+/g," ");
+
+}
+
+
+/* =====================================================
+   SIMPAN DATA
+===================================================== */
 
 async function simpanData(){
+
   if(!selectedDriver){
-    showToast("Driver belum dipilih");
+
+    showToast(
+      "Driver belum dipilih"
+    );
+
     return;
+
   }
 
-  const tanggal = document.getElementById("tanggalInput").value;
-  const namaSiswa = document.getElementById("namaSiswa").value.trim();
-  const kelas = document.getElementById("kelas").value.trim();
-  const alamat = document.getElementById("alamat").value.trim();
-  const noTelepon = document.getElementById("noTelepon").value.trim(); // 🔥 FIX
-  const jarak = Number(document.getElementById("jarak").value || 0);
-  const trayek = document.getElementById("trayek").value;
-  const total = hitungTotal();
 
-  // 🔥 CEK DATA KOSONG
-  if(!tanggal ||!namaSiswa ||!kelas ||!noTelepon ||!alamat ||!jarak ||!trayek || total === 0){
-    showToast("Lengkapi semua data dulu");
+  const tanggalValue =
+    tanggalInput.value;
+
+  const namaValue =
+    namaSiswa.value.trim();
+
+  const kelasValue =
+    kelas.value.trim();
+
+  const alamatValue =
+    alamat.value.trim();
+
+  const teleponValue =
+    normalisasiTelepon(
+      noTelepon.value
+    );
+
+  const jarakValue =
+    Number(
+      jarak.value || 0
+    );
+
+  const trayekValue =
+    trayek.value;
+
+  const total =
+    hitungTotal();
+
+
+  /* VALIDASI */
+
+  if(
+    !tanggalValue ||
+    !namaValue ||
+    !kelasValue ||
+    !teleponValue ||
+    !alamatValue ||
+    !jarakValue ||
+    !trayekValue ||
+    total <= 0
+  ){
+
+    showToast(
+      "Lengkapi semua data terlebih dahulu"
+    );
+
     return;
+
   }
+
+
+  /* CEK DISKON */
+
+  let diskon = 0;
+
+  if(
+    trayekValue === "pp"
+  ){
+
+    diskon =
+      Number(
+        discPP.value || 0
+      );
+
+  }else{
+
+    diskon =
+      Number(
+        discOneWay.value || 0
+      );
+
+  }
+
+
+  /* DATA FIRESTORE */
 
   const data = {
-    driverId: selectedDriver.docId,
-    namaDriver: selectedDriver.nama, // 🔥 PENTING BUAT FILTER CARI.HTML
-    tanggal: tanggal,
-    namaSiswa: namaSiswa,
-    kelas: kelas,
-    noTelepon: noTelepon, // 🔥 FIX
-    alamat: alamat,
-    jarak: jarak,
-    trayek: trayek,
-    total: total,
-    createdAt: serverTimestamp()
+
+    driverId:
+      selectedDriver.docId,
+
+    namaDriver:
+      selectedDriver.nama,
+
+    tanggal:
+      tanggalValue,
+
+    namaSiswa:
+      namaValue,
+
+    kelas:
+      kelasValue,
+
+    noTelepon:
+      teleponValue,
+
+    alamat:
+      alamatValue,
+
+    jarak:
+      jarakValue,
+
+    trayek:
+      trayekValue,
+
+    diskon:
+      diskon,
+
+    total:
+      total,
+
+    createdAt:
+      serverTimestamp()
+
   };
+
 
   try{
-    await addDoc(collection(db,"perjalanan"), data);
-    showToast("✅ Simpan berhasil"); // 🔥 ALERT BERHASIL
-    resetFormAwal();
-    document.getElementById("tanggalInput").value = getToday();
-    document.getElementById("namaSiswa").value = "";
-    document.getElementById("kelas").value = "";
-    document.getElementById("noTelepon").value = ""; // 🔥 FIX
-    document.getElementById("alamat").value = "";
-  }catch(e){
-    showToast("Gagal simpan: " + e.message);
+
+    /* disable tombol */
+
+    btnSimpan.disabled =
+      true;
+
+    btnSimpan.textContent =
+      "⏳ Menyimpan...";
+
+
+    await addDoc(
+      collection(
+        db,
+        "perjalanan"
+      ),
+      data
+    );
+
+
+    showToast(
+      "✅ Data perjalanan berhasil disimpan"
+    );
+
+
+    /*
+      Reset hanya form siswa.
+      Driver tetap dipertahankan.
+    */
+
+    resetForm();
+
+
+    displayDriver.textContent =
+      selectedDriver.nama;
+
+
+  }catch(error){
+
+    console.error(
+      "Gagal simpan:",
+      error
+    );
+
+    showToast(
+      "Gagal simpan: " +
+      error.message
+    );
+
+  }finally{
+
+    btnSimpan.disabled =
+      false;
+
+    btnSimpan.textContent =
+      "💾 Simpan Data";
+
   }
+
 }
 
-window.toggleSidebar = function(){
-  document.getElementById("sidebar").classList.toggle("active");
-}
 
-document.addEventListener("click", function(e){
-  const sidebar = document.querySelector(".sidebar");
-  const btn = document.querySelector(".toggle-btn");
-  if(!sidebar.contains(e.target) &&!btn.contains(e.target)){
-    sidebar.classList.remove("active");
+/* =====================================================
+   TOMBOL KEMBALI
+===================================================== */
+
+/*
+   PERBAIKAN UTAMA:
+
+   Tidak lagi menggunakan
+   onclick="kembali()"
+
+   Kita pasang event langsung
+   ke tombol.
+
+   Ini lebih aman untuk
+   <script type="module>.
+*/
+
+btnKembali.addEventListener(
+  "click",
+  function(){
+
+    window.location.href =
+      "dashboard.html";
+
   }
-});
+);
 
-window.logout = function(){
-  localStorage.clear();
-  location.href = "index.html";
-}
 
-window.lanjutSiswa = lanjutSiswa;
-window.simpanData = simpanData;
-window.hitungTotal = hitungTotal;
-window.updateHarga = updateHarga;
-window.ubahTrayek = ubahTrayek;
-window.logout = function(){
-  localStorage.clear();
-  
-  // 🔥 KUNCI: Hapus history dan paksa ke login
-  window.location.replace("login.html"); 
-  
-  // 🔥 JAGA2: Cegah back
-  history.pushState(null, null, location.href);
-  window.onpopstate = function () {
-      history.go(1);
+/*
+   Tetap sediakan fungsi global
+   jika halaman lain memanggil
+   kembali().
+*/
+
+window.kembali =
+  function(){
+
+    window.location.href =
+      "dashboard.html";
+
   };
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+window.logout =
+  function(){
+
+    localStorage.clear();
+
+    window.location.href =
+      "index.html";
+
+  };
+
+
+/* =====================================================
+   EVENT
+===================================================== */
+
+btnLanjut.addEventListener(
+  "click",
+  lanjutSiswa
+);
+
+
+btnSimpan.addEventListener(
+  "click",
+  simpanData
+);
+
+
+jarak.addEventListener(
+  "input",
+  updateHarga
+);
+
+
+trayek.addEventListener(
+  "change",
+  ubahTrayek
+);
+
+
+discOneWay.addEventListener(
+  "input",
+  hitungTotal
+);
+
+
+discPP.addEventListener(
+  "input",
+  hitungTotal
+);
+
+
+/* =====================================================
+   INIT
+===================================================== */
+
+async function init(){
+
+  tanggalInput.value =
+    getToday();
+
+
+  await loadConfigHarga();
+
+  await loadDrivers();
+
 }
-  </script>
-</body>
+
+
+init();
+
+</script></body>
 </html>
