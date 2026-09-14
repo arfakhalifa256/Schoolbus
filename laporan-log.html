@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Laporan Aktivitas - School Bus</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Poppins',Arial;background:#f4f7fb;padding:16px;color:#1f2937}
+header{background:linear-gradient(135deg,#1e90ff,#187bdb);color:#fff;padding:16px;border-radius:16px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center}
+header h1{font-size:18px}
+.btn{padding:10px 14px;border:none;border-radius:10px;background:#1e90ff;color:#fff;font-weight:600;cursor:pointer;font-size:13px}
+.btn-outline{background:#fff;color:#1e90ff;border:1.5px solid #1e90ff}
+.card{background:#fff;padding:16px;border-radius:16px;box-shadow:0 8px 24px rgba(15,23,42,.08);margin-bottom:16px}
+.filter{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.filter input,.filter select{padding:10px;border:1.5px solid #dbe3ee;border-radius:10px;font-family:'Poppins';font-size:13px}
+.table-wrapper{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:700px}
+th,td{padding:12px;text-align:left;font-size:13px;border-bottom:1px solid #f1f5f9}
+th{background:#eff6ff;color:#1d4ed8;font-weight:700;position:sticky;top:0}
+.badge{padding:4px 8px;border-radius:20px;font-size:11px;font-weight:600}
+.badge.admin{background:#dbeafe;color:#1e40af}
+.badge.driver{background:#dcfce7;color:#166534}
+.badge.gagal{background:#fee2e2;color:#b91c1c}
+.badge.input{background:#fef3c7;color:#92400e} /* 🔥 WARNA BARU */
+.loading{text-align:center;padding:20px;color:#64748b}
+@media(max-width:768px){.filter{flex-direction:column}.btn{width:100%}}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📋 Laporan Aktivitas</h1>
+  <div>
+    <button class="btn btn-outline" onclick="window.location.href='dashboard.html'">← Kembali</button>
+    <button class="btn" onclick="exportCSV()">Export CSV</button>
+  </div>
+</header>
+
+<div class="card">
+  <div class="filter">
+    <input type="date" id="tglAwal">
+    <input type="date" id="tglAkhir">
+    <input type="text" id="cariUser" placeholder="Cari Username...">
+    <select id="filterAktivitas">
+      <option value="">Semua Aktivitas</option>
+      <option value="Login">Login</option>
+      <option value="Login Gagal">Login Gagal</option>
+      <option value="Logout">Logout</option>
+      <option value="Register">Register</option>
+      <option value="Reset Password">Reset Password</option>
+      <option value="Input Data">Input Data</option>
+      <option value="Edit Data">Edit Data</option>
+      <option value="Hapus Data">Hapus Data</option>
+    </select>
+    <button class="btn" onclick="loadLogs()">🔍 Filter</button>
+  </div>
+  <div class="table-wrapper">
+    <table id="tabelLog">
+      <thead><tr><th>Waktu</th><th>Username</th><th>Role</th><th>Aktivitas</th><th>Detail</th></tr></thead>
+      <tbody id="tbodyLog"><tr><td colspan="5" class="loading">⏳ Memuat data...</td></tr></tbody>
+    </table>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {apiKey: "AIzaSyBxbArCZ6iIWQ8wS7QIonZOeN4t_r9o2WU",authDomain: "schoolbus-6a7fd.firebaseapp.com",projectId: "schoolbus-6a7fd",};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+if(localStorage.getItem("role")!== "admin"){ alert("Akses ditolak. Hanya Admin"); window.location.replace("input.html"); }
+
+let allLogs = [];
+document.addEventListener("DOMContentLoaded", ()=>{ const today = new Date().toISOString().split("T")[0]; document.getElementById("tglAwal").value = today; document.getElementById("tglAkhir").value = today; loadLogs(); });
+
+async function loadLogs(){
+  const tbody = document.getElementById("tbodyLog");
+  tbody.innerHTML = `<tr><td colspan="5" class="loading">⏳ Memuat data...</td></tr>`;
+  const tglAwal = document.getElementById("tglAwal").value; const tglAkhir = document.getElementById("tglAkhir").value;
+  const cariUser = document.getElementById("cariUser").value.toLowerCase(); const filterAktivitas = document.getElementById("filterAktivitas").value;
+  const q = query(collection(db,"logs"), orderBy("waktu","desc")); const snap = await getDocs(q);
+  allLogs = [];
+  snap.forEach(docSnap=>{ const d = docSnap.data(); const waktu = d.waktu?.toDate? d.waktu.toDate() : new Date(); const tanggalStr = waktu.toISOString().split("T")[0];
+    if(tglAwal && tanggalStr < tglAwal) return; if(tglAkhir && tanggalStr > tglAkhir) return;
+    if(cariUser &&!d.username.toLowerCase().includes(cariUser)) return;
+    if(filterAktivitas && d.aktivitas!== filterAktivitas) return;
+    allLogs.push({...d, waktu});
+  });
+  renderTable(allLogs);
+}
+
+function renderTable(data){
+  const tbody = document.getElementById("tbodyLog");
+  if(data.length === 0){ tbody.innerHTML = `<tr><td colspan="5" class="loading">Data tidak ditemukan</td></tr>`; return; }
+  tbody.innerHTML = "";
+  data.forEach(d=>{
+    const waktuStr = d.waktu.toLocaleString("id-ID",{dateStyle:"medium",timeStyle:"short"});
+    let badgeClass = d.role === "admin"? "admin" : d.role === "driver"? "driver" : "";
+    let aktivitasClass = "";
+    if(d.aktivitas === "Login Gagal") aktivitasClass = "gagal";
+    if(d.aktivitas === "Input Data") aktivitasClass = "input"; // 🔥
+
+    tbody.innerHTML += `<tr><td>${waktuStr}</td><td>${d.username}</td><td><span class="badge ${badgeClass}">${d.role}</span></td><td><span class="badge ${aktivitasClass}">${d.aktivitas}</span></td><td>${d.detail || "-"}</td></tr>`;
+  });
+}
+
+window.exportCSV = function(){
+  if(allLogs.length === 0){ alert("Tidak ada data"); return; }
+  let csv = "Waktu,Username,Role,Aktivitas,Detail\n";
+  allLogs.forEach(d=>{ const waktuStr = d.waktu.toLocaleString("id-ID"); csv += `"${waktuStr}","${d.username}","${d.role}","${d.aktivitas}","${d.detail || ''}"\n`; });
+  const blob = new Blob([csv], {type:"text/csv"}); const url = URL.createObjectURL(blob);
+  const a = document.createElement("a"); a.href = url; a.download = `laporan_aktivitas_${new Date().toISOString().split("T")[0]}.csv`; a.click(); URL.revokeObjectURL(url);
+}
+window.loadLogs = loadLogs;
+</script>
+</body>
+</html>

@@ -17,7 +17,6 @@ body{
   height:100vh;
   padding:16px;
 }
-
 .box{
   background:#fff;
   padding:24px;
@@ -28,12 +27,10 @@ body{
   animation:fadeIn.3s ease;
 }
 @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-
 .logo{text-align:center;margin-bottom:16px}
 .logo img{width:70px;height:70px;border-radius:18px;background:#1e90ff;padding:8px}
 .logo h2{margin-top:8px;font-size:20px;color:#1e293b;font-weight:700}
 .logo p{font-size:12px;color:#64748b}
-
 input{
   width:100%;
   height:44px;
@@ -46,7 +43,6 @@ input{
   transition:.2s;
 }
 input:focus{border-color:#1e90ff}
-
 .btn{
   width:100%;
   height:44px;
@@ -62,13 +58,11 @@ input:focus{border-color:#1e90ff}
 }
 .btn:hover{background:#0f6ecf}
 .btn:disabled{background:gray}
-
 .btn-outline{
   background:#fff;
   color:#1e90ff;
   border:1.5px solid #1e90ff;
 }
-
 .link-row{
   display:flex;
   justify-content:space-between;
@@ -80,7 +74,6 @@ input:focus{border-color:#1e90ff}
   cursor:pointer;
   font-weight:600;
 }
-
 #loading{
   display:none;
   text-align:center;
@@ -88,7 +81,6 @@ input:focus{border-color:#1e90ff}
   color:#64748b;
   margin:8px 0;
 }
-
 /* POPUP LUPA PASSWORD */
 .popup{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);display:none;justify-content:center;align-items:center;z-index:2000}
 .popup-content{background:#fff;padding:20px;border-radius:16px;width:90%;max-width:320px}
@@ -117,7 +109,6 @@ input:focus{border-color:#1e90ff}
   <button class="btn btn-outline" id="btnRegister" onclick="register()" style="display:none;">Daftar</button>
 
   <div id="loading">⏳ Loading...</div>
-
 </div>
 
 <!-- POPUP LUPA PASSWORD -->
@@ -133,7 +124,7 @@ input:focus{border-color:#1e90ff}
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, collection, getDocs, doc, setDoc, updateDoc, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, collection, getDocs, doc, setDoc, updateDoc, query, where, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBxbArCZ6iIWQ8wS7QIonZOeN4t_r9o2WU",
@@ -142,6 +133,21 @@ const firebaseConfig = {
 };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+
+// ================= FUNGSI LOG AKTIVITAS =================
+async function saveLog(aktivitas, detail=""){
+  try{
+    const username = localStorage.getItem("username") || "Guest";
+    const role = localStorage.getItem("role") || "-";
+    await addDoc(collection(db, "logs"), {
+      username: username,
+      role: role,
+      aktivitas: aktivitas, // contoh: "Login", "Logout", "Register"
+      detail: detail, // contoh: "Login dari Bintarojaya"
+      waktu: serverTimestamp()
+    });
+  }catch(e){ console.log("Gagal simpan log:", e) }
+}
 
 // ================= MODE =================
 let mode = "login";
@@ -174,6 +180,8 @@ window.register = async function(){
   await setDoc(doc(db,"users",id),{ username, password, role: "driver", driverId: id });
   await setDoc(doc(db,"drivers",id),{ driverId: id, namaDriver: username, username, createdAt: Date.now() });
 
+  await saveLog("Register", `Akun baru: ${username}`); // 🔥 LOG
+
   loading.style.display = "none";
   alert("Berhasil daftar! Silakan login");
   usernameEl.value = username;
@@ -194,7 +202,11 @@ window.login = async function(){
   const snapshot = await getDocs(q);
   loading.style.display = "none";
 
-  if(snapshot.empty){ alert("Login gagal. Username/Password salah"); return; }
+  if(snapshot.empty){
+    await saveLog("Login Gagal", `Username: ${username}`); // 🔥 LOG GAGAL
+    alert("Login gagal. Username/Password salah");
+    return;
+  }
 
   const found = snapshot.docs[0].data();
   localStorage.setItem("login","true");
@@ -202,8 +214,10 @@ window.login = async function(){
   localStorage.setItem("role",found.role);
   localStorage.setItem("driverId",found.driverId);
 
-  if(found.role === "admin"){ window.location.href = "dashboard.html"; }
-  else { window.location.href = "input.html"; }
+  await saveLog("Login", `Login sebagai ${found.role}`); // 🔥 LOG SUKSES
+
+  if(found.role === "admin"){ window.location.replace("dashboard.html"); }
+  else { window.location.replace("input.html"); }
 };
 
 // ================= LUPA PASSWORD =================
@@ -223,15 +237,17 @@ window.resetPassword = async function(){
   const docId = snap.docs[0].id;
   await updateDoc(doc(db,"users",docId),{ password: passBaru });
 
+  await saveLog("Reset Password", `Reset untuk: ${user}`); // 🔥 LOG
+
   alert("✅ Password berhasil direset");
   closeLupa();
 }
-  
+
 // 🔥 KUNCI: Kalau udah login, lempar sesuai role
 if(localStorage.getItem("login") === "true"){
   const role = localStorage.getItem("role");
   if(role === "driver"){
-    window.location.replace("input.html"); // replace biar ga ada history
+    window.location.replace("input.html");
   } else {
     window.location.replace("dashboard.html");
   }
@@ -242,7 +258,6 @@ history.pushState(null, null, location.href);
 window.onpopstate = function () {
     history.go(1);
 };
-
 </script>
 </body>
 </html>
