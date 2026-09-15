@@ -31,21 +31,21 @@
   .brand{display:flex;align-items:center;gap:10px}
   .brand img {width: 42px; height: 42px; border-radius: 12px; object-fit: cover; background: #fff; padding: 3px; box-shadow:0 2px 6px rgba(0,0,0,0.1)}
   .brand-text .subtitle {font-size: 10px; opacity: 0.9; line-height: 1; letter-spacing:0.5px}
-  .brand-text .title {font-size: 16px; font-weight: 700; line-height: 1.2;}
+  .brand-text .title {font-size: 12px; font-weight: 700; line-height: 1.2;}
   .greeting{text-align:right}
-  .greeting .hello{font-size:11px;opacity:.9}
-  .greeting b{font-size:15px}
+  .greeting .hello{font-size:10px;opacity:.9}
+  .greeting b{font-size:10px}
   .saldo-card{
     background:#e0f2fe; margin:-40px 16px 16px; border-radius:18px;
     padding:16px; box-shadow:0 8px 24px rgba(0,0,0,.08);
     display:flex; justify-content:space-between; align-items:center;
   }
   .saldo-left{display:flex;gap:10px;align-items:center}
-  .saldo-icon{background:#e0f2fe;color:#0284c7;padding:10px;border-radius:12px;font-size:20px}
-  .saldo-title{font-size:11px;color:var(--muted)}
-  .saldo-amount{font-size:18px;font-weight:800;color:#111}
-  .saldo-btn{background:var(--gojek);color:#fff;border:none;padding:8px 14px;border-radius:12px;font-size:12px;font-weight:600}
-  .section-title{font-size:15px;font-weight:700;margin:0 16px 12px}
+  .saldo-icon{background:#e0f2fe;color:#0284c7;padding:10px;border-radius:12px;font-size:12px}
+  .saldo-title{font-size:10px;color:var(--muted)}
+  .saldo-amount{font-size:12px;font-weight:800;color:#111}
+  .saldo-btn{background:var(--gojek);color:#fff;border:none;padding:8px 14px;border-radius:12px;font-size:10px;font-weight:600}
+  .section-title{font-size:12px;font-weight:700;margin:0 16px 12px}
   .menu-grid{
     display:grid; grid-template-columns:repeat(4,1fr); gap:12px;
     padding:0 16px; margin-bottom:20px;
@@ -57,21 +57,21 @@
   }
   .menu-icon{
     width:46px;height:46px;margin:0 auto 8px;border-radius:14px;
-    display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff
+    display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff
   }
-  .menu-name{font-size:11px;font-weight:600;line-height:1.3}
+  .menu-name{font-size:10px;font-weight:600;line-height:1.3}
   .promo{
     margin:0 16px 16px; background:linear-gradient(90deg,#fbbf24,#f59e0b);
     border-radius:16px; padding:14px; color:#fff;
     display:flex;justify-content:space-between;align-items:center
   }
-  .promo b{font-size:14px}
+  .promo b{font-size:10px}
   .riwayat-card{
     background:#fff; margin:0 16px; border-radius:16px; padding:14px;
     box-shadow:0 4px 12px rgba(0,0,0,.05);
   }
   .riwayat-header{display:flex;justify-content:space-between;margin-bottom:10px}
-  .riwayat-item{display:flex;justify-content:space-between;font-size:12px;padding:8px 0;border-bottom:1px dashed var(--border)}
+  .riwayat-item{display:flex;justify-content:space-between;font-size:10px;padding:8px 0;border-bottom:1px dashed var(--border)}
   .riwayat-item:last-child{border:0}
   .bottom-nav{
     position:fixed;left:50%;transform:translateX(-50%);bottom:10px;
@@ -79,7 +79,7 @@
     border-radius:20px;padding:8px; display:grid;grid-template-columns:repeat(4,1fr);gap:8px;z-index:999;
     box-shadow:0 10px 28px rgba(15,23,42,.12);
   }
-  .nav-item{text-decoration:none;color:#64748b;font-weight:700;font-size:11px;display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px;border-radius:14px}
+  .nav-item{text-decoration:none;color:#64748b;font-weight:700;font-size:10px;display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px;border-radius:14px}
   .nav-item.active{background:#e0f2fe;color:#0284c7}
   @media(max-width:420px){ .menu-grid{grid-template-columns:repeat(4,1fr)} }
   </style>
@@ -132,7 +132,7 @@
 
   <!-- PROMO -->
   <div class="promo">
-    <div><b>Tips Hemat BBM</b><br><span style="font-size:11px">Catat BBM tiap hari biar untung</span></div>
+    <div><b>Tips Hemat BBM</b><br><span style="font-size:10px">Catat BBM tiap hari biar untung</span></div>
     <div>⛽</div>
   </div>
 
@@ -140,9 +140,9 @@
   <div class="riwayat-card">
     <div class="riwayat-header">
       <b>Aktivitas Terbaru</b>
-      <a href="lapor.html" style="font-size:11px;color:var(--gojek);text-decoration:none">Lihat Semua</a>
+      <a href="lapor.html" style="font-size:10px;color:var(--gojek);text-decoration:none">Lihat Semua</a>
     </div>
-    <div id="riwayatList"><div style="text-align:center;color:var(--muted);font-size:12px">Loading...</div></div>
+    <div id="riwayatList"><div style="text-align:center;color:var(--muted);font-size:10px">Loading...</div></div>
   </div>
 
   <!-- BOTTOM NAV -->

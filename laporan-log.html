@@ -9,17 +9,17 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Poppins',Arial;background:#f4f7fb;padding:16px;color:#1f2937}
 header{background:linear-gradient(135deg,#1e90ff,#187bdb);color:#fff;padding:16px;border-radius:16px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center}
-header h1{font-size:18px}
-.btn{padding:10px 14px;border:none;border-radius:10px;background:#1e90ff;color:#fff;font-weight:600;cursor:pointer;font-size:13px}
+header h1{font-size:12px}
+.btn{padding:10px 14px;border:none;border-radius:10px;background:#1e90ff;color:#fff;font-weight:600;cursor:pointer;font-size:12px}
 .btn-outline{background:#fff;color:#1e90ff;border:1.5px solid #1e90ff}
 .card{background:#fff;padding:16px;border-radius:16px;box-shadow:0 8px 24px rgba(15,23,42,.08);margin-bottom:16px}
 .filter{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
-.filter input,.filter select{padding:10px;border:1.5px solid #dbe3ee;border-radius:10px;font-family:'Poppins';font-size:13px}
+.filter input,.filter select{padding:10px;border:1.5px solid #dbe3ee;border-radius:10px;font-family:'Poppins';font-size:12px}
 .table-wrapper{overflow-x:auto}
 table{width:100%;border-collapse:collapse;min-width:700px}
-th,td{padding:12px;text-align:left;font-size:13px;border-bottom:1px solid #f1f5f9}
+th,td{padding:12px;text-align:left;font-size:10px;border-bottom:1px solid #f1f5f9}
 th{background:#eff6ff;color:#1d4ed8;font-weight:700;position:sticky;top:0}
-.badge{padding:4px 8px;border-radius:20px;font-size:11px;font-weight:600}
+.badge{padding:4px 8px;border-radius:20px;font-size:10px;font-weight:600}
 .badge.admin{background:#dbeafe;color:#1e40af}
 .badge.driver{background:#dcfce7;color:#166534}
 .badge.gagal{background:#fee2e2;color:#b91c1c}
@@ -51,8 +51,6 @@ th{background:#eff6ff;color:#1d4ed8;font-weight:700;position:sticky;top:0}
       <option value="Register">Register</option>
       <option value="Reset Password">Reset Password</option>
       <option value="Input Data">Input Data</option>
-      <option value="Edit Data">Edit Data</option>
-      <option value="Hapus Data">Hapus Data</option>
     </select>
     <button class="btn" onclick="loadLogs()">🔍 Filter</button>
   </div>
