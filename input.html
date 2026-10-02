@@ -8,8 +8,6 @@
   <meta name="theme-color" content="#1e90ff">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="School Bus App">
   <style>
   @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
   html, body {width: 100%; max-width: 100%; overflow-x: hidden;}
@@ -22,7 +20,7 @@
   input,select,textarea{width:100%;border:1px solid var(--border);border-radius:12px;padding:12px 14px;font-size:14px;outline:none;background:#fff;transition:.2s ease; font-family:'Poppins'}
   textarea{min-height:90px;resize:vertical}
   input:focus,select:focus,textarea:focus{border-color:var(--primary);box-shadow:0 0 0 4px rgba(30,144,255,.10)}
-  input[readonly]{background:#f8fafc;color:#6b7280;font-weight:700}
+  input[readonly]{background:#f8fafc;color:#111827;font-weight:700}
 .save{width:100%;border:none;border-radius:12px;padding:13px 14px;font-size:14px;font-weight:700;color:#fff;cursor:pointer;margin-top:14px;background:var(--primary);transition:.2s ease}
 .save:hover{background:var(--primary-dark)}
 .full{width:100%}
@@ -46,7 +44,6 @@
 .user-name{font-size:12px; font-weight:700; line-height:1.2;}
 .user-role{font-size:9px; background:rgba(255,255,255,0.25); padding:2px 6px; border-radius:20px; font-weight:600; letter-spacing:0.5px;}
   @media(min-width:480px){.user-info{display:block}}
-  @media(max-width:768px){body{padding:0}.brand-text.title{font-size:14px}.brand img{width:36px;height:36px}}
   </style>
 </head>
 <body>
@@ -60,8 +57,8 @@
   </div>
   <div class="header-right">
     <div class="user-info"><div class="user-name" id="namaHeader">Admin</div><div class="user-role" id="roleHeader">ADMIN</div></div>
-    <button class="btn-back" onclick="kembali()" title="Kembali ke Dashboard"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
-    <button class="btn-back btn-logout" onclick="logout()" title="Logout"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg></button>
+    <button class="btn-back" onclick="kembali()" title="Kembali">⬅️</button>
+    <button class="btn-back btn-logout" onclick="logout()" title="Logout">🚪</button>
   </div>
 </header>
 
@@ -79,23 +76,29 @@
     <label>Kelas</label><input type="text" id="kelas" placeholder="Masukkan kelas">
     <label>Alamat</label><textarea id="alamat" placeholder="Masukkan alamat siswa"></textarea>
     <label>No.Telepon</label><input type="tel" id="noTelepon" placeholder="Masukkan no.telepon">
-    <label>Jarak (Km)</label><input type="number" id="jarak" step="0.1" placeholder="Masukkan jarak" oninput="updateHarga()">
-    <label>Trayek</label><h4>Trayek PP yg dijalankan oleh 2 driver pilih pagi/sore sesuai driver dan pilih discount PP 10%</h4>
+    <label>Jarak (Km)</label><input type="number" id="jarak" step="0.1" placeholder="Contoh: 1 / 1.1 / 4.5" oninput="updateHarga()">
+    <label>Trayek</label>
     <select id="trayek" onchange="ubahTrayek()">
-      <option value="">-- Pilih Trayek --</option><option value="pergi">Pergi</option><option value="pulang">Pulang</option><option value="pp">PP</option>
+      <option value="">-- Pilih Trayek --</option>
+      <option value="pergi">Pergi (One Way)</option>
+      <option value="pulang">Pulang (One Way)</option>
+      <option value="pp">PP 90% (Sesuai Tabel SS)</option>
     </select>
+
     <div id="onewaySection" class="section-box" style="display:none;">
-      <label>Harga One Way (Rp)</label><input id="hargaOneWay" readonly>
-      <label>Diskon (%)</label><h4>khusus PP di jalankan 2 driver disc 10 %</h4>
-      <input type="number" id="discOneWay" placeholder="0" oninput="hitungTotal()">
-      <label>Total (Rp)</label><input id="totalOneWay" readonly>
+      <label>Harga One Way (Rp) - Sesuai Tabel Foto</label><input id="hargaOneWay" readonly>
+      <label>Diskon Tambahan (%)</label>
+      <input type="number" id="discOneWay" value="0" placeholder="0" oninput="hitungTotal()">
+      <label>Total Bayar (Rp)</label><input id="totalOneWay" readonly>
     </div>
+
     <div id="ppSection" class="section-box" style="display:none;">
-      <label>Harga PP (Rp)</label><input id="hargaPP" readonly>
-      <label>Diskon (%)</label><h4>khusus PP disc 10 %</h4>
-      <input type="number" id="discPP" value="0" oninput="hitungTotal()">
+      <label>Harga PP 90% (Rp) - One Way x 1.8</label><input id="hargaPP" readonly>
+      <label>Diskon Tambahan (%)</label>
+      <input type="number" id="discPP" value="0" placeholder="0" oninput="hitungTotal()">
       <label>Total PP (Rp)</label><input id="totalPP" readonly>
     </div>
+
     <button class="save" onclick="simpanData()">💾 Simpan Data</button>
     <div id="previewTotal">Preview Total: Rp 0</div>
   </div>
@@ -111,7 +114,6 @@ const firebaseConfig = {apiKey: "AIzaSyBxbArCZ6iIWQ8wS7QIonZOeN4t_r9o2WU",authDo
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// 🔥 CEK LOGIN + KUNCI BACK
 if(localStorage.getItem("login")!== "true"){ location.replace("login.html"); }
 history.pushState(null, null, location.href);
 window.onpopstate = function () { history.go(1); };
@@ -120,16 +122,28 @@ const role = localStorage.getItem("role");
 const username = localStorage.getItem("username") || "Admin";
 const driverIdLogin = localStorage.getItem("driverId");
 
-// 🔥 TAMPILIN NAMA DI HEADER
 document.getElementById("namaHeader").innerText = username;
 document.getElementById("roleHeader").innerText = role? role.toUpperCase() : "USER";
 
 let selectedDriver = null;
 let daftarDriver = [];
+
+// === TABEL TARIF PERSIS SESUAI SS FOTO ===
+const TARIF_TABLE = {
+  "1":608000,"1.1":615800,"1.2":623600,"1.3":631400,"1.4":639200,"1.5":647000,"1.6":654800,"1.7":662600,"1.8":670400,"1.9":678200,
+  "2":686000,"2.1":693800,"2.2":701600,"2.3":709400,"2.4":717200,"2.5":725000,"2.6":732800,"2.7":740600,"2.8":748400,"2.9":756200,
+  "3":764000,"3.1":771800,"3.2":779600,"3.3":787400,"3.4":795200,"3.5":803000,"3.6":810800,"3.7":818600,"3.8":826400,"3.9":834200,
+  "4":842000,"4.1":849800,"4.2":857600,"4.3":865400,"4.4":873200,"4.5":881000,"4.6":888800,"4.7":896600,"4.8":904400,"4.9":912200,
+  "5":920000,"5.1":927800,"5.2":935600,"5.3":943400,"5.4":951200,"5.5":959000,"5.6":966800,"5.7":974600,"5.8":982400,"5.9":990200,
+  "6":998000,"6.1":1005800,"6.2":1013600,"6.3":1021400,"6.4":1029200,"6.5":1037000,"6.6":1044800,"6.7":1052600,"6.8":1060400,"6.9":1068200,
+  "7":1076000,"7.1":1083800,"7.2":1091600,"7.3":1099400,"7.4":1107200,"7.5":1115000,"7.6":1122800,"7.7":1130600,"7.8":1138400,"7.9":1146200,
+  "8":1154000
+};
+
 let configHarga = { hargaDasar: 608000, kenaikanPerTitik: 7800 };
 
 document.addEventListener("DOMContentLoaded", async () => {
-  document.getElementById("tanggalInput").value = getToday();
+  document.getElementById("tanggalInput").value = new Date().toISOString().split("T")[0];
   await loadConfigHarga();
   await loadDrivers();
 });
@@ -157,15 +171,96 @@ async function loadDrivers(){
 }
 
 function lanjutSiswa(){ const pilih = document.getElementById("pilihDriver").value; if(pilih === ""){ showToast("Pilih driver dulu"); return; } selectedDriver = daftarDriver[Number(pilih)]; document.getElementById("displayDriver").textContent = selectedDriver.nama; document.getElementById("siswaContainer").style.display = "block"; resetFormAwal(); }
-function resetFormAwal(){ document.getElementById("trayek").value = ""; document.getElementById("jarak").value = ""; document.getElementById("discOneWay").value = ""; document.getElementById("discPP").value = "0"; document.getElementById("hargaOneWay").value = ""; document.getElementById("hargaPP").value = ""; document.getElementById("totalOneWay").value = ""; document.getElementById("totalPP").value = ""; document.getElementById("onewaySection").style.display = "none"; document.getElementById("ppSection").style.display = "none"; document.getElementById("previewTotal").textContent = "Preview Total: Rp 0"; }
+
+function resetFormAwal(){
+  document.getElementById("trayek").value = "";
+  document.getElementById("jarak").value = "";
+  document.getElementById("discOneWay").value = "0";
+  document.getElementById("discPP").value = "0";
+  document.getElementById("hargaOneWay").value = "";
+  document.getElementById("hargaPP").value = "";
+  document.getElementById("totalOneWay").value = "";
+  document.getElementById("totalPP").value = "";
+  document.getElementById("onewaySection").style.display = "none";
+  document.getElementById("ppSection").style.display = "none";
+  document.getElementById("previewTotal").textContent = "Preview Total: Rp 0";
+}
+
 function rupiah(angka){return "Rp " + Number(angka || 0).toLocaleString("id-ID");}
-function getToday(){return new Date().toISOString().split("T")[0];}
 function showToast(msg){const t = document.getElementById("toast");t.textContent = msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2500);}
-async function loadConfigHarga(){try{const snap = await getDoc(doc(db,"config","harga")); if(snap.exists()){configHarga = snap.data();}}catch(e){}}
-function hitungHargaDasar(jarak){if (jarak <= 1) return configHarga.hargaDasar; const titik = Math.ceil((jarak - 1) / 0.1); return configHarga.hargaDasar + (titik * configHarga.kenaikanPerTitik);}
-function ubahTrayek(){const trayek = document.getElementById("trayek").value;const oneway = document.getElementById("onewaySection");const pp = document.getElementById("ppSection");if(trayek === "pergi" || trayek === "pulang"){oneway.style.display = "block"; pp.style.display = "none";}else if(trayek === "pp"){oneway.style.display = "none"; pp.style.display = "block";}else {oneway.style.display = "none"; pp.style.display = "none";}updateHarga();}
-function updateHarga(){const jarak = Number(document.getElementById("jarak").value || 0);const trayek = document.getElementById("trayek").value;if(!jarak ||!trayek) return;const harga = hitungHargaDasar(jarak);if(trayek === "pergi" || trayek === "pulang"){document.getElementById("hargaOneWay").value = rupiah(Math.round(harga));}if(trayek === "pp"){document.getElementById("hargaPP").value = rupiah(Math.round(harga * 2));}hitungTotal();}
-function hitungTotal(){const jarak = Number(document.getElementById("jarak").value || 0);const trayek = document.getElementById("trayek").value;if(!jarak ||!trayek) return 0;const harga = hitungHargaDasar(jarak); let total = 0;if(trayek === "pergi" || trayek === "pulang"){const diskon = Number(document.getElementById("discOneWay").value || 0);total = harga - (harga * diskon / 100);document.getElementById("totalOneWay").value = rupiah(Math.round(total));}if(trayek === "pp"){const hargaPP = harga * 2;const diskon = Number(document.getElementById("discPP").value || 0);total = hargaPP - (hargaPP * diskon / 100);document.getElementById("totalPP").value = rupiah(Math.round(total));}document.getElementById("previewTotal").textContent = "Preview Total: " + rupiah(Math.round(total));return Math.round(total);}
+async function loadConfigHarga(){try{const snap = await getDoc(doc(db,"config","harga")); if(snap.exists()){const d=snap.data(); if(d.hargaDasar) configHarga.hargaDasar=d.hargaDasar; if(d.kenaikanPerTitik) configHarga.kenaikanPerTitik=d.kenaikanPerTitik;}}catch(e){}}
+
+// === FIX PERHITUNGAN SESUAI FOTO ===
+function hitungHargaDasar(jarak){
+  jarak = Number(jarak);
+  if(!jarak || jarak<=0) return 0;
+  if(jarak < 1) return 608000;
+
+  // cari di tabel persis
+  let key = jarak.toFixed(1);
+  // ubah 5.0 jadi 5 biar match tabel
+  if(key.endsWith('.0')) key = parseInt(key).toString();
+  if(TARIF_TABLE[key]!== undefined) return TARIF_TABLE[key];
+  // coba key original
+  if(TARIF_TABLE[jarak.toString()]!== undefined) return TARIF_TABLE[jarak.toString()];
+
+  // kalau jarak lebih dari 8, lanjutkan rumus
+  if(jarak > 8){
+    const base8 = 1154000;
+    const titik = Math.ceil((jarak - 8) / 0.1);
+    return base8 + (titik * 7800);
+  }
+  // fallback rumus umum
+  const titik = Math.ceil((jarak - 1) / 0.1);
+  return configHarga.hargaDasar + (titik * configHarga.kenaikanPerTitik);
+}
+
+function ubahTrayek(){
+  const trayek = document.getElementById("trayek").value;
+  const oneway = document.getElementById("onewaySection");
+  const pp = document.getElementById("ppSection");
+  if(trayek === "pergi" || trayek === "pulang"){oneway.style.display = "block"; pp.style.display = "none";}
+  else if(trayek === "pp"){oneway.style.display = "none"; pp.style.display = "block";}
+  else {oneway.style.display = "none"; pp.style.display = "none";}
+  updateHarga();
+}
+
+function updateHarga(){
+  const jarak = Number(document.getElementById("jarak").value || 0);
+  const trayek = document.getElementById("trayek").value;
+  if(!jarak ||!trayek) return;
+  const hargaOneWay = hitungHargaDasar(jarak);
+  const hargaPP90 = Math.round(hargaOneWay * 1.8); // KUNCI: sesuai kolom PP 90% di foto
+
+  if(trayek === "pergi" || trayek === "pulang"){
+    document.getElementById("hargaOneWay").value = rupiah(hargaOneWay);
+  }
+  if(trayek === "pp"){
+    document.getElementById("hargaPP").value = rupiah(hargaPP90);
+  }
+  hitungTotal();
+}
+
+function hitungTotal(){
+  const jarak = Number(document.getElementById("jarak").value || 0);
+  const trayek = document.getElementById("trayek").value;
+  if(!jarak ||!trayek) return 0;
+  const hargaOneWay = hitungHargaDasar(jarak);
+  const hargaPP90 = Math.round(hargaOneWay * 1.8);
+  let total = 0;
+  if(trayek === "pergi" || trayek === "pulang"){
+    const diskon = Number(document.getElementById("discOneWay").value || 0);
+    total = Math.round(hargaOneWay - (hargaOneWay * diskon / 100));
+    document.getElementById("totalOneWay").value = rupiah(total);
+  }
+  if(trayek === "pp"){
+    const diskon = Number(document.getElementById("discPP").value || 0);
+    total = Math.round(hargaPP90 - (hargaPP90 * diskon / 100));
+    document.getElementById("totalPP").value = rupiah(total);
+  }
+  document.getElementById("previewTotal").textContent = "Preview Total: " + rupiah(total);
+  return total;
+}
 
 async function simpanData(){
   if(!selectedDriver){showToast("Driver belum dipilih"); return;}
@@ -182,41 +277,47 @@ async function simpanData(){
     showToast("Lengkapi semua data dulu"); return;
   }
 
-  const data = {driverId: selectedDriver.docId, namaDriver: selectedDriver.nama, tanggal: tanggal, namaSiswa: namaSiswa, kelas: kelas, noTelepon: noTelepon, alamat: alamat, jarak: jarak, trayek: trayek, total: total, createdAt: serverTimestamp()};
+  const hargaOneWay = hitungHargaDasar(jarak);
+  const hargaPP90 = Math.round(hargaOneWay * 1.8);
+
+  const data = {
+    driverId: selectedDriver.docId,
+    namaDriver: selectedDriver.nama,
+    tanggal: tanggal,
+    namaSiswa: namaSiswa,
+    kelas: kelas,
+    noTelepon: noTelepon,
+    alamat: alamat,
+    jarak: jarak,
+    trayek: trayek,
+    hargaOneWay: hargaOneWay,
+    hargaPP90: hargaPP90,
+    total: total,
+    createdAt: serverTimestamp()
+  };
 
   try{
-    // 1. SIMPAN KE PERJALANAN
     await addDoc(collection(db,"perjalanan"), data);
-
-    // 2. 🔥 SIMPAN LOG RIWAYAT
     await addDoc(collection(db, "logs"), {
       username: username,
       role: role,
       aktivitas: "Input Data",
-      detail: `Siswa: ${namaSiswa} | Driver: ${selectedDriver.nama} | Trayek: ${trayek.toUpperCase()} | Total: ${rupiah(total)}`,
+      detail: `Siswa: ${namaSiswa} | Driver: ${selectedDriver.nama} | ${jarak}km | ${trayek.toUpperCase()} | OW:${rupiah(hargaOneWay)} PP90:${rupiah(hargaPP90)} | Total:${rupiah(total)}`,
       waktu: serverTimestamp()
     });
-
-    showToast("✅ Simpan berhasil");
-    resetFormAwal();
-    document.getElementById("tanggalInput").value = getToday();
+    showToast("✅ Simpan berhasil - "+rupiah(total));
     document.getElementById("namaSiswa").value = "";
     document.getElementById("kelas").value = "";
     document.getElementById("noTelepon").value = "";
     document.getElementById("alamat").value = "";
-
+    resetFormAwal();
   }catch(e){showToast("Gagal simpan: " + e.message);}
 }
 
-// 🔥 FUNGSI KEMBALI
 window.kembali = function(){ window.location.href = "dashboard.html"; }
-
-// 🔥 FUNGSI LOGOUT ANTI BACK + SIMPAN LOG
 window.logout = async function(){
   if(confirm("Yakin ingin logout?")){
-    await addDoc(collection(db, "logs"), {
-      username: username, role: role, aktivitas: "Logout", detail: "Logout dari Input", waktu: serverTimestamp()
-    });
+    try{ await addDoc(collection(db, "logs"), { username: username, role: role, aktivitas: "Logout", detail: "Logout dari Input", waktu: serverTimestamp() }); }catch(e){}
     localStorage.clear();
     location.replace("login.html");
     history.pushState(null, null, location.href);
